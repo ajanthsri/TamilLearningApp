@@ -90,7 +90,7 @@ export function QuizQuestion({ question, onAnswer, disabled, selected, showNotSu
         <AudioButton text={question.prompt} size="lg" />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
         {question.options.map(opt => (
           <button
             key={opt}
@@ -102,9 +102,9 @@ export function QuizQuestion({ question, onAnswer, disabled, selected, showNotSu
               borderRadius: 'var(--radius)',
               padding: '14px 10px',
               minHeight: 56,
-              fontFamily: question.type === 'letter' ? 'var(--font-display)' : 'var(--font-body)',
+              fontFamily: 'var(--font-body)',
               fontSize: question.type === 'letter' ? 22 : 15,
-              letterSpacing: question.type === 'letter' ? 1.5 : 0,
+              fontStyle: question.type === 'letter' ? 'italic' : 'normal',
               lineHeight: 1.25,
               cursor: disabled ? 'default' : 'pointer',
               transition: 'background 150ms ease-out, color 150ms ease-out',

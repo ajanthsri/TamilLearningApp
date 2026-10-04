@@ -198,7 +198,7 @@ function Result({
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 'calc(100dvh - 56px)' }}>
       <Kicker>
-        {score} of {total}
+        You got {score} of {total}
       </Kicker>
       {suggestion === null ? (
         <>

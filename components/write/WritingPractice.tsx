@@ -98,9 +98,9 @@ export function WritingPractice({ onFinish }: Props) {
       </div>
       <div
         style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 80,
-          letterSpacing: 3,
+          fontFamily: 'var(--font-body)',
+          fontStyle: 'italic',
+          fontSize: 72,
           color: 'var(--navy)',
           lineHeight: 1,
           margin: '12px 0 20px',
@@ -109,7 +109,7 @@ export function WritingPractice({ onFinish }: Props) {
         “{item.target.roman}”
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 10 }}>
         {item.options.map(l => {
           const isTarget = l.id === item.target.id
           const isPicked = l.id === picked
@@ -128,7 +128,8 @@ export function WritingPractice({ onFinish }: Props) {
                 border: answered && (isTarget || isPicked) ? 'none' : '1.5px solid var(--navy)',
                 borderRadius: 'var(--radius)',
                 fontFamily: 'var(--font-tamil)',
-                fontSize: 38,
+                fontSize: 34,
+                padding: 0,
                 color: 'var(--navy)',
                 opacity: answered && !isTarget && !isPicked ? 0.45 : 1,
                 cursor: answered ? 'default' : 'pointer',
