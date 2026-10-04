@@ -46,6 +46,8 @@ export type Dialogue = {
   notes?: string
   /** The line split into words, in order, for the newbie breakdown */
   breakdown?: DialogueWord[]
+  /** Set on real film lines only */
+  credit?: { actor: string; film: string; year: number }
 }
 
 export type Level = {

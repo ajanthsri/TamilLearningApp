@@ -33,7 +33,7 @@ const INTRO: Record<LearnTab, { tamil: string; body: string }> = {
   letters: { tamil: 'எழுத்துக்கள்', body: 'Every Tamil word starts with one of these shapes. Tap a card to see it in a word.' },
   words: { tamil: 'வார்த்தைகள்', body: 'Words your family uses every day.' },
   phrases: { tamil: 'வாக்கியங்கள்', body: 'Things worth saying out loud.' },
-  dialogues: { tamil: 'டயலாக்', body: 'Original lines in the spirit of Tamil cinema.' },
+  dialogues: { tamil: 'டயலாக்', body: 'Famous film lines and originals. Break any of them down word by word.' },
 }
 
 const TOTALS: Record<LearnTab, number> = {
@@ -310,17 +310,30 @@ function LearnContent() {
         )}
 
         {tab === 'dialogues' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            {dialogues.map((d, i) => (
-              <DialogueCard
-                key={d.id}
-                dialogue={d}
-                index={i}
-                seen={s('dialogues', d.id)}
-                onHear={() => hear('dialogues')(d.id, d.tamil)}
-                onBreakdown={() => reveal('dialogues')(d.id, d.tamil)}
-              />
-            ))}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+            {[
+              { title: 'From the films', list: dialogues.filter(d => d.credit) },
+              { title: 'Originals', list: dialogues.filter(d => !d.credit) },
+            ]
+              .filter(group => group.list.length > 0)
+              .map(group => (
+                <section key={group.title}>
+                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 20, letterSpacing: 1, color: 'var(--navy)', marginBottom: 10, fontWeight: 400 }}>{group.title}</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                    {group.list.map((d, i) => (
+                      <DialogueCard
+                        key={d.id}
+                        dialogue={d}
+                        index={i}
+                        label={d.credit ? 'Film line' : 'Original'}
+                        seen={s('dialogues', d.id)}
+                        onHear={() => hear('dialogues')(d.id, d.tamil)}
+                        onBreakdown={() => reveal('dialogues')(d.id, d.tamil)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              ))}
           </div>
         )}
       </main>

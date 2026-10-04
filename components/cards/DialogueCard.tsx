@@ -115,14 +115,28 @@ export function DialogueCard({ dialogue, seen, practised, index = 0, label = 'Di
       {open && <WordChips words={words} accent={mood} />}
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, position: 'relative' }}>
-        <div style={{ minWidth: 0 }}>
-          <div style={{ fontFamily: 'var(--font-display)', fontSize: 11, letterSpacing: 1.5, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase' }}>
-            In the spirit of
+        {dialogue.credit ? (
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 11, letterSpacing: 1.5, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase' }}>
+              From the film
+            </div>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 17, letterSpacing: 1, color: '#fff', lineHeight: 1.2 }}>
+              {dialogue.credit.actor} <span style={{ color: mood }}>·</span> {dialogue.credit.film} ({dialogue.credit.year})
+            </div>
+            <div style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 11, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>
+              Quoted for learning. Film Tamil (Chennai).
+            </div>
           </div>
-          <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.35 }}>
-            {dialogue.inspiration}
+        ) : (
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 11, letterSpacing: 1.5, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase' }}>
+              In the spirit of
+            </div>
+            <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(255,255,255,0.65)', lineHeight: 1.35 }}>
+              {dialogue.inspiration}
+            </div>
           </div>
-        </div>
+        )}
         <AudioButton text={dialogue.tamil} onPlay={onHear} size="md" />
       </div>
     </article>

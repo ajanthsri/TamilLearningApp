@@ -1,8 +1,11 @@
 import { Dialogue } from '@/types'
+import { filmLines } from './film-lines'
+import { SHOW_FILM_LINES } from '@/lib/config'
 
 // Breakdown glosses to be checked by a native speaker.
 
-export const dialogues: Dialogue[] = [
+/** Original lines written in the spirit of Tamil cinema */
+export const originalDialogues: Dialogue[] = [
   {
     id: 1,
     tamil: 'நான் யாரையும் தேடவில்லை. ஆனால் தேவைப்பட்டால் கண்டுபிடிப்பேன்.',
@@ -88,3 +91,16 @@ export const dialogues: Dialogue[] = [
     ],
   },
 ]
+
+/** Film lines alternate with originals, so the line of the day mixes both */
+function interleave(a: Dialogue[], b: Dialogue[]): Dialogue[] {
+  const out: Dialogue[] = []
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
+    if (a[i]) out.push(a[i])
+    if (b[i]) out.push(b[i])
+  }
+  return out
+}
+
+/** Every line the app shows. Film lines only when SHOW_FILM_LINES is on. */
+export const dialogues: Dialogue[] = SHOW_FILM_LINES ? interleave(filmLines, originalDialogues) : originalDialogues
