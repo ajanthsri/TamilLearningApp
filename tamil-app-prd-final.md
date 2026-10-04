@@ -69,6 +69,9 @@ Character card (change character, growth strip LV1–5), XP bar, packs progress,
 - **Recordings:** `npm run audio:list` writes `audio/recording-list-lk.csv` (119 lines: words, phrases, dialogues, letters, examples, packs, levels and UI lines). Record each one, save it in `public/audio/lk/` under its filename (.mp3, .m4a or .wav). The build runs `scripts/audio-manifest.ts`, which matches files back to their Tamil text, so every play button showing that text uses the recording.
 - **Drum hits:** synthesised in the browser (`lib/sfx.ts`), so there are no files to license. "ta-DHUM" on a correct answer, a short fanfare on pack complete. Can be switched off on Stats (`tamil-sfx`).
 
+### Cinema line breakdown
+Every dialogue card (Home line of the day, Learn → Dialogues) has a **"Break it down, word by word"** button. It opens the line as word chips in order, each showing Tamil, romanisation and meaning. Tapping a chip plays that word and outlines it. Opening the breakdown marks the line seen and gives +10 XP once per line (`meaning_revealed`, tag `dialogues:{id}`). Data: optional `breakdown: { tamil, roman, english }[]` on each `Dialogue`; the words are in the recording list (group `dword`). Glosses need native review.
+
 ### Sri Lankan Tamil content changes (need native review)
 - Words: ஓம் (yes), இடியப்பம் (string hoppers), கோப்பி (coffee), அம்மம்மா (grandmother, new), notes on அண்ணா and இண்டைக்கு.
 - Phrases rewritten in spoken Sri Lankan Tamil (விளங்கேல்லை, கதையுங்கோ, சுகமா இருக்கிறீங்களா?, இன்னொருக்கா, வேணும்).

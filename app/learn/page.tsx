@@ -228,6 +228,7 @@ function LearnContent() {
                 index={i}
                 seen={s('dialogues', d.id)}
                 onHear={() => hear('dialogues')(d.id, d.tamil)}
+                onBreakdown={() => reveal('dialogues')(d.id, d.tamil)}
               />
             ))}
           </div>

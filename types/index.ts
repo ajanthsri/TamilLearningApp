@@ -30,6 +30,12 @@ export type Phrase = {
   literal?: string
 }
 
+export type DialogueWord = {
+  tamil: string
+  roman: string
+  english: string
+}
+
 export type Dialogue = {
   id: number
   tamil: string
@@ -38,6 +44,8 @@ export type Dialogue = {
   inspiration: string
   mood: 'swagger' | 'philosophical' | 'romantic' | 'political' | 'emotional' | 'defiant'
   notes?: string
+  /** The line split into words, in order, for the newbie breakdown */
+  breakdown?: DialogueWord[]
 }
 
 export type Level = {

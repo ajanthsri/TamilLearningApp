@@ -228,7 +228,7 @@ function Home() {
 
         {/* ── Line of the day ── */}
         <section aria-labelledby="dotd-heading">
-          <SectionTitle id="dotd-heading" hint="Tap play to hear it">
+          <SectionTitle id="dotd-heading" hint="Tap any word to hear it">
             Cinema line of the day
           </SectionTitle>
           <DialogueCard
@@ -238,6 +238,10 @@ function Home() {
             onHear={() => {
               markSeen('dialogues', dialogue.id)
               reward('card_heard', `dialogues:${dialogue.id}`, dialogue.tamil)
+            }}
+            onBreakdown={() => {
+              markSeen('dialogues', dialogue.id)
+              reward('meaning_revealed', `dialogues:${dialogue.id}`, dialogue.tamil)
             }}
           />
         </section>

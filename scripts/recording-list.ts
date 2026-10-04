@@ -39,6 +39,8 @@ export function buildRows(): Row[] {
   words.forEach(w => add('word', w.id, w.tamil, w.roman, w.english))
   phrases.forEach(p => add('phrase', p.id, p.tamil, p.roman, p.english))
   dialogues.forEach(d => add('dialogue', d.id, d.tamil, d.roman, d.english))
+  let dw = 0
+  dialogues.forEach(d => d.breakdown?.forEach(w => add('dword', ++dw, w.tamil, w.roman, w.english)))
   letters.forEach(l => add('letter', l.id, l.tamil, l.roman, `Letter ${l.roman}`))
   letters.forEach(l => add('example', l.id, l.example.tamil, l.example.roman, l.example.english))
   packs.forEach(p => add('pack', p.number, p.tamil, p.roman, p.english))
