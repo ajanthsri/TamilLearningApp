@@ -1,0 +1,177 @@
+/* Fonts are self-hosted via @fontsource, imported in app/layout.tsx */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design Tokens ─────────────────────────────────────────── */
+:root {
+  --vermillion: #C1272D;
+  --vermillion-dark: #9B1F23;
+  --turmeric: #F5A623;
+  --navy: #1A1F3C;
+  --navy-light: #252B4A;
+  --cream: #FAF3E0;
+  --cream-dark: #EDE5CC;
+  --stone: #8C7B6B;
+  --stone-light: #B5A898;
+  --white: #FDFAF4;
+  --success: #2D6A3F;
+  --error-soft: #E8A090;
+
+  --font-tamil: 'Tiro Tamil', 'Latha', 'Tamil MN', 'Noto Sans Tamil', serif;
+  --font-display: 'Bebas Neue', 'Impact', sans-serif;
+  --font-body: 'Lora', 'Georgia', serif;
+
+  --radius: 10px;
+  --radius-lg: 16px;
+  --shadow-card: 0 4px 20px rgba(26, 31, 60, 0.14);
+  --shadow-heavy: 0 8px 32px rgba(26, 31, 60, 0.22);
+}
+
+/* ── Reset ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--cream);
+  color: var(--navy);
+  font-family: var(--font-body);
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* ── Tamil Script ───────────────────────────────────────────── */
+.tamil {
+  font-family: var(--font-tamil);
+  line-height: 1.3;
+}
+
+/* ── Grain Texture ─────────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px;
+}
+
+/* ── Animations ────────────────────────────────────────────── */
+@keyframes stampIn {
+  from { opacity: 0; transform: scale(1.04); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pageFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes victoryFlash {
+  0%   { opacity: 0; }
+  15%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes victoryReveal {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes xpFloat {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes barFill {
+  from { width: 0%; }
+}
+
+@keyframes audioPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(193, 39, 45, 0.45); }
+  100% { box-shadow: 0 0 0 14px rgba(193, 39, 45, 0); }
+}
+
+@keyframes levelUpStamp {
+  0%   { opacity: 0; transform: scale(1.3); }
+  60%  { opacity: 1; transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Quiz question entrance: wipes in from the left */
+@keyframes questionWipe {
+  from { opacity: 0; clip-path: inset(0 100% 0 0); }
+  to   { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+
+/* ── Utility Classes ───────────────────────────────────────── */
+.page-enter {
+  animation: pageFade 160ms ease-out both;
+}
+
+.stamp {
+  animation: stampIn 180ms ease-out both;
+}
+
+button { font: inherit; }
+
+.tappable {
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 80ms ease-out;
+  cursor: pointer;
+}
+.tappable:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) {
+  .tappable:hover { filter: brightness(1.06); }
+}
+
+:focus-visible {
+  outline: 2px solid var(--turmeric);
+  outline-offset: 2px;
+}
+
+/* ── Card flip (LetterCard) ────────────────────────────────── */
+.flip {
+  perspective: 900px;
+}
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 350ms ease-in-out;
+}
+.flip.flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+/* ── Reduced motion ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--stone-light); border-radius: 2px; }
+
+/* ── Selection ─────────────────────────────────────────────── */
+::selection { background: var(--turmeric); color: var(--navy); }
