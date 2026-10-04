@@ -12,7 +12,7 @@ import { StageCard } from './StageCard'
 import { Avatar } from '@/components/ui/Avatar'
 import { BackButton } from '@/components/ui/PageHeader'
 import { characters } from '@/data/avatars'
-import { useProfile } from '@/hooks/useProfile'
+import { useProfile, NAME_MAX } from '@/hooks/useProfile'
 import { SHOW_STAGE_SELECTION } from '@/lib/config'
 
 type Screen = 'welcome' | 'dialect' | 'avatar' | 'stage' | 'check' | 'result'
@@ -25,6 +25,11 @@ interface Props {
 
 export function OnboardingFlow({ onComplete }: Props) {
   const [screen, setScreen] = useState<Screen>('welcome')
+  const [dir, setDir] = useState<'forward' | 'back'>('forward')
+  const go = (next: Screen, d: 'forward' | 'back' = 'forward') => {
+    setDir(d)
+    setScreen(next)
+  }
   const [chosen, setChosen] = useState<LearnerStage | null>(null)
   const [selected, setSelected] = useState<string | null>(null)
   const [score, setScore] = useState(0)
@@ -33,7 +38,8 @@ export function OnboardingFlow({ onComplete }: Props) {
   const quiz = useQuiz(NO_IDS, NO_IDS)
   const { markSeen } = useProgress()
   const { setStage, completeOnboarding } = useLearnerStage()
-  const { character, hasAvatar, setAvatar, setDialect } = useProfile()
+  const { character, hasAvatar, setAvatar, setDialect, setName } = useProfile()
+  const [nameDraft, setNameDraft] = useState('')
 
   useEffect(() => () => clearTimeout(timer.current), [])
 
@@ -45,7 +51,8 @@ export function OnboardingFlow({ onComplete }: Props) {
 
   const continueFromAvatar = () => {
     if (!hasAvatar) setAvatar(character.id)
-    if (SHOW_STAGE_SELECTION) setScreen('stage')
+    setName(nameDraft)
+    if (SHOW_STAGE_SELECTION) go('stage')
     else finish('newbie')
   }
 
@@ -55,7 +62,7 @@ export function OnboardingFlow({ onComplete }: Props) {
     quiz.buildFixedQuiz(PLACEMENT_SETS[chosen])
     setScore(0)
     setSelected(null)
-    setScreen('check')
+    go('check')
   }
 
   const answer = (opt: string) => {
@@ -70,7 +77,7 @@ export function OnboardingFlow({ onComplete }: Props) {
     const last = quiz.currentIndex + 1 >= quiz.questions.length
     timer.current = setTimeout(() => {
       setSelected(null)
-      if (last) setScreen('result')
+      if (last) go('result')
       else quiz.advance()
     }, ADVANCE_MS)
   }
@@ -104,7 +111,9 @@ export function OnboardingFlow({ onComplete }: Props) {
         த
       </div>
 
-      <div key={screen} className="page-enter" style={{ maxWidth: 440, margin: '0 auto', minHeight: '100%', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+      <div
+        key={screen}
+        style={{ animation: `${dir === 'back' ? 'slideInLeft' : 'slideInRight'} 240ms ease-out backwards`, maxWidth: 440, margin: '0 auto', minHeight: '100%', position: 'relative', display: 'flex', flexDirection: 'column' }}>
         {screen === 'welcome' && (
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 'calc(100dvh - 56px)' }}>
             <Kicker>Learn Tamil</Kicker>
@@ -139,14 +148,14 @@ export function OnboardingFlow({ onComplete }: Props) {
               No sign-up. No streaks. Just Tamil.
             </p>
             <div style={{ marginTop: 32 }}>
-              <Primary onClick={() => setScreen('dialect')}>Let&apos;s begin →</Primary>
+              <Primary onClick={() => go('dialect')}>Let&apos;s begin →</Primary>
             </div>
           </div>
         )}
 
         {screen === 'dialect' && (
           <>
-            <BackButton label="Back" onClick={() => setScreen('welcome')} />
+            <BackButton label="Back" onClick={() => go('welcome', 'back')} />
             <StepDots step={1} />
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 36, letterSpacing: 1, lineHeight: 1.05, marginTop: 14, fontWeight: 400 }}>
               Which Tamil do you want to learn?
@@ -162,7 +171,7 @@ export function OnboardingFlow({ onComplete }: Props) {
               <Primary
                 onClick={() => {
                   setDialect('lk')
-                  setScreen('avatar')
+                  go('avatar')
                 }}
               >
                 Continue →
@@ -173,7 +182,7 @@ export function OnboardingFlow({ onComplete }: Props) {
 
         {screen === 'avatar' && (
           <>
-            <BackButton label="Back" onClick={() => setScreen('dialect')} />
+            <BackButton label="Back" onClick={() => go('dialect', 'back')} />
             <StepDots step={2} />
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 36, letterSpacing: 1, lineHeight: 1.05, marginTop: 14, fontWeight: 400 }}>
               Pick your character
@@ -223,7 +232,30 @@ export function OnboardingFlow({ onComplete }: Props) {
                 </div>
               </div>
             )}
-            <div style={{ marginTop: 24 }}>
+            <label style={{ display: 'block', marginTop: 22 }}>
+              <span style={{ display: 'block', fontFamily: 'var(--font-display)', fontSize: 18, letterSpacing: 1, marginBottom: 6 }}>
+                What should we call you? <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, letterSpacing: 0, color: 'rgba(255,255,255,0.5)' }}>(optional)</span>
+              </span>
+              <input
+                value={nameDraft}
+                onChange={e => setNameDraft(e.target.value.slice(0, NAME_MAX))}
+                maxLength={NAME_MAX}
+                autoComplete="given-name"
+                placeholder="Your first name"
+                style={{
+                  width: '100%',
+                  background: 'rgba(255,255,255,0.06)',
+                  border: '2px solid rgba(255,255,255,0.15)',
+                  borderRadius: 'var(--radius)',
+                  padding: '12px 14px',
+                  color: '#fff',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 16,
+                  outline: 'none',
+                }}
+              />
+            </label>
+            <div style={{ marginTop: 20 }}>
               <Primary onClick={continueFromAvatar} disabled={!hasAvatar}>
                 Start learning →
               </Primary>
@@ -234,7 +266,7 @@ export function OnboardingFlow({ onComplete }: Props) {
         {screen === 'stage' && (
           <>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <BackButton label="Back" onClick={() => setScreen('avatar')} />
+              <BackButton label="Back" onClick={() => go('avatar', 'back')} />
               <TextButton onClick={() => finish('newbie')}>Skip</TextButton>
             </div>
             <h2 lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 24, lineHeight: 1.4, color: 'var(--turmeric)', fontWeight: 400, marginTop: 8 }}>

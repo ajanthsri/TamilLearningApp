@@ -1,5 +1,5 @@
 'use client'
-import { Suspense, useRef } from 'react'
+import { Suspense, useEffect, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { LearnTab, ModuleKey, XPAction } from '@/types'
 import { letters } from '@/data/letters'
@@ -13,7 +13,11 @@ import { useReward } from '@/components/ui/Reward'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { NavBar } from '@/components/ui/NavBar'
 import { LetterCard } from '@/components/cards/LetterCard'
-import { WordCard } from '@/components/cards/WordCard'
+import { WordTile } from '@/components/cards/WordTile'
+import { AudioButton } from '@/components/ui/AudioButton'
+import { Say } from '@/components/ui/Say'
+import { BackButton } from '@/components/ui/PageHeader'
+import { packs } from '@/data/packs'
 import { PhraseCard } from '@/components/cards/PhraseCard'
 import { DialogueCard } from '@/components/cards/DialogueCard'
 import { useHydrated } from '@/lib/store'
@@ -41,6 +45,12 @@ const TOTALS: Record<LearnTab, number> = {
 
 const isTab = (v: string | null): v is LearnTab => TABS.some(t => t.key === v)
 
+// Word topics, in the same order and with the same names as the Speak packs
+const CATEGORY_TO_PACK: Record<string, string> = { greetings: 'greetings', family: 'family', food: 'food', emotions: 'feelings', nature: 'nature', time: 'time' }
+const TOPICS = Object.entries(CATEGORY_TO_PACK).map(([category, packId]) => ({ category, pack: packs.find(p => p.id === packId)! }))
+
+const SITUATIONS = Array.from(new Set(phrases.map(p => p.situation)))
+
 function LearnContent() {
   const router = useRouter()
   const params = useSearchParams()
@@ -53,7 +63,28 @@ function LearnContent() {
   const param = params.get('tab')
   const tab: LearnTab = isTab(param) ? param : hydrated ? getStageInfo(stage).defaultLearnTab : 'words'
 
+  // Slide direction follows tab order: moving right slides in from the right
+  const tabIndex = TABS.findIndex(t => t.key === tab)
+  const prevTab = useRef(tabIndex)
+  const prevTopic = useRef<string | null>(null)
+  const topicNow = params.get('topic')
+  const dir =
+    tabIndex < prevTab.current || (tabIndex === prevTab.current && prevTopic.current && !topicNow) ? 'slideInLeft' : 'slideInRight'
+  useEffect(() => {
+    prevTab.current = tabIndex
+    prevTopic.current = topicNow
+  }, [tabIndex, topicNow])
+
   const setTab = (t: LearnTab) => router.replace(`/learn?tab=${t}`, { scroll: false })
+
+  // Words: pick a topic first, then a grid of that topic's words
+  const topicParam = params.get('topic')
+  const topicInfo = tab === 'words' ? TOPICS.find(t => t.category === topicParam) ?? null : null
+  const topic = topicInfo?.category ?? null
+  const setTopic = (c: string | null) => {
+    router.replace(c ? `/learn?tab=words&topic=${c}` : '/learn?tab=words', { scroll: false })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   const act = (module: ModuleKey, action: XPAction) => (id: number, tamil: string) => {
     markSeen(module, id)
@@ -125,7 +156,7 @@ function LearnContent() {
         })}
       </div>
 
-      <main key={tab} className="page-enter" style={{ padding: '18px 16px 0' }}>
+      <main key={`${tab}-${topic ?? ''}`} style={{ padding: '18px 16px 0', animation: `${dir} 240ms ease-out backwards` }}>
         {/* Intro + counts */}
         <div style={{ marginBottom: 16 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
@@ -187,34 +218,93 @@ function LearnContent() {
           </>
         )}
 
-        {tab === 'words' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {words.map((w, i) => (
-              <WordCard
-                key={w.id}
-                word={w}
-                index={i}
-                seen={s('words', w.id)}
-                practised={p('words', w.id)}
-                onHear={() => hear('words')(w.id, w.tamil)}
-                onReveal={() => reveal('words')(w.id, w.tamil)}
-              />
-            ))}
+        {tab === 'words' && !topic && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}>
+            {TOPICS.map((t, i) => {
+              const inTopic = words.filter(w => w.category === t.category)
+              const seenN = inTopic.filter(w => s('words', w.id)).length
+              const done = seenN === inTopic.length
+              return (
+                <div
+                  key={t.category}
+                  style={{
+                    position: 'relative',
+                    background: 'var(--navy)',
+                    borderRadius: 'var(--radius-lg)',
+                    borderTop: `5px solid ${t.pack.colour}`,
+                    boxShadow: 'var(--shadow-card)',
+                    animation: `stampIn 180ms ${i * 50}ms ease-out backwards`,
+                  }}
+                >
+                  <button
+                    onClick={() => setTopic(t.category)}
+                    className="tappable"
+                    aria-label={`${t.pack.english}: ${seenN} of ${inTopic.length} seen`}
+                    style={{ width: '100%', minHeight: 132, background: 'none', border: 'none', textAlign: 'left', padding: '14px 14px 12px', color: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}
+                  >
+                    <span aria-hidden lang="ta" style={{ position: 'absolute', right: 8, bottom: -6, fontFamily: 'var(--font-tamil)', fontSize: 64, color: 'rgba(255,255,255,0.06)', lineHeight: 1 }}>
+                      {t.pack.tamil.slice(0, 1)}
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-display)', fontSize: 26, letterSpacing: 1, lineHeight: 1 }}>{t.pack.english}</span>
+                    <span lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 14, color: 'rgba(255,255,255,0.65)', marginTop: 2 }}>{t.pack.tamil}</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: done ? 'var(--turmeric)' : 'rgba(255,255,255,0.55)', marginTop: 8 }}>
+                      {done ? '✓ All seen' : `${seenN}/${inTopic.length} seen`}
+                    </span>
+                  </button>
+                  <div style={{ position: 'absolute', top: 10, right: 10 }}>
+                    <AudioButton text={t.pack.tamil} size="xs" variant="light" label={`Hear ${t.pack.roman}`} />
+                  </div>
+                </div>
+              )
+            })}
           </div>
         )}
 
+        {tab === 'words' && topicInfo && (
+          <>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 14 }}>
+              <BackButton label="All topics" dark={false} onClick={() => setTopic(null)} />
+              <Say tamil={topicInfo.pack.tamil} roman={topicInfo.pack.roman} size={16} colour="var(--navy)" />
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
+              {words
+                .filter(w => w.category === topicInfo.category)
+                .map((w, i) => (
+                  <WordTile
+                    key={w.id}
+                    word={w}
+                    index={i}
+                    seen={s('words', w.id)}
+                    practised={p('words', w.id)}
+                    onHear={() => hear('words')(w.id, w.tamil)}
+                    onReveal={() => reveal('words')(w.id, w.tamil)}
+                  />
+                ))}
+            </div>
+          </>
+        )}
+
         {tab === 'phrases' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {phrases.map((ph, i) => (
-              <PhraseCard
-                key={ph.id}
-                phrase={ph}
-                index={i}
-                seen={s('phrases', ph.id)}
-                practised={p('phrases', ph.id)}
-                onHear={() => hear('phrases')(ph.id, ph.tamil)}
-                onReveal={() => reveal('phrases')(ph.id, ph.tamil)}
-              />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            {SITUATIONS.map(sit => (
+              <section key={sit}>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, letterSpacing: 1, color: 'var(--navy)', marginBottom: 8, fontWeight: 400 }}>{sit}</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {phrases
+                    .filter(ph => ph.situation === sit)
+                    .map((ph, i) => (
+                      <PhraseCard
+                        key={ph.id}
+                        phrase={ph}
+                        index={i}
+                        seen={s('phrases', ph.id)}
+                        practised={p('phrases', ph.id)}
+                        onHear={() => hear('phrases')(ph.id, ph.tamil)}
+                        onReveal={() => reveal('phrases')(ph.id, ph.tamil)}
+                      />
+                    ))}
+                </div>
+              </section>
             ))}
           </div>
         )}

@@ -15,8 +15,7 @@ import { phrases } from '@/data/phrases'
 import { dialogues } from '@/data/dialogues'
 import { ModuleKey } from '@/types'
 import { Avatar } from '@/components/ui/Avatar'
-import { characters } from '@/data/avatars'
-import { useProfile } from '@/hooks/useProfile'
+import { useProfile, NAME_MAX } from '@/hooks/useProfile'
 import { useXP } from '@/hooks/useXP'
 import { PACKS_KEY, usePacks } from '@/hooks/usePacks'
 import { SHOW_STAGE_SELECTION } from '@/lib/config'
@@ -33,10 +32,10 @@ export default function ProgressPage() {
   const hydrated = useHydrated()
   const { countSeen, countPractised } = useProgress()
   const { stage, setStage, resetOnboarding } = useLearnerStage()
-  const { character, setAvatar, sfx, setSfx, resetProfile } = useProfile()
+  const { character, sfx, setSfx, resetProfile, name, setName } = useProfile()
+  const [nameDraft, setNameDraft] = useState<string | null>(null)
   const { currentLevel } = useXP()
   const { packs, isComplete, completedCount } = usePacks()
-  const [picking, setPicking] = useState(false)
   const [confirming, setConfirming] = useState(false)
   const cancelRef = useRef<HTMLButtonElement>(null)
 
@@ -72,42 +71,11 @@ export default function ProgressPage() {
                 <div style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>
                   means {character.meaning}
                 </div>
-                <button
-                  onClick={() => setPicking(p => !p)}
-                  className="tappable"
-                  style={{ marginTop: 8, background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', borderRadius: 16, padding: '6px 14px', fontFamily: 'var(--font-display)', fontSize: 15, letterSpacing: 1 }}
-                >
-                  {picking ? 'Done' : 'Change character'}
-                </button>
+                <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 6, maxWidth: 200 }}>
+                  Keep learning and {character.name} grows up with you.
+                </div>
               </div>
             </div>
-            {picking && (
-              <div role="radiogroup" aria-label="Character" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 8, marginTop: 14 }}>
-                {characters.map(c => (
-                  <button
-                    key={c.id}
-                    role="radio"
-                    aria-checked={c.id === character.id}
-                    onClick={() => setAvatar(c.id)}
-                    className="tappable"
-                    style={{
-                      background: 'rgba(255,255,255,0.04)',
-                      border: c.id === character.id ? '2px solid var(--turmeric)' : '2px solid rgba(255,255,255,0.1)',
-                      borderRadius: 'var(--radius)',
-                      padding: '8px 2px 6px',
-                      color: '#fff',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: 2,
-                    }}
-                  >
-                    <Avatar character={c} level={currentLevel.level} size={56} />
-                    <span style={{ fontFamily: 'var(--font-display)', fontSize: 15, letterSpacing: 1 }}>{c.name}</span>
-                  </button>
-                ))}
-              </div>
-            )}
             <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 14 }} aria-label="How your character grows">
               {[1, 2, 3, 4, 5].map(l => (
                 <div key={l} style={{ opacity: l <= currentLevel.level ? 1 : 0.35, textAlign: 'center', flex: 1 }}>
@@ -222,6 +190,33 @@ export default function ProgressPage() {
         <section aria-labelledby="settings-heading">
           <SectionTitle id="settings-heading" tamil="அமைப்புகள்" label="Settings" />
           <div style={{ background: 'var(--white)', border: '1.5px solid var(--cream-dark)', borderRadius: 'var(--radius-lg)' }}>
+            <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', gap: 12 }}>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: 18, letterSpacing: 1, color: 'var(--navy)', flexShrink: 0 }}>Your name</span>
+              <input
+                value={nameDraft ?? (hydrated ? name : '')}
+                onChange={e => setNameDraft(e.target.value.slice(0, NAME_MAX))}
+                onBlur={() => {
+                  if (nameDraft !== null) setName(nameDraft)
+                  setNameDraft(null)
+                }}
+                onKeyDown={e => e.key === 'Enter' && (e.target as HTMLInputElement).blur()}
+                maxLength={NAME_MAX}
+                placeholder="Add your name"
+                style={{
+                  minWidth: 0,
+                  width: 170,
+                  textAlign: 'right',
+                  border: '1.5px solid var(--cream-dark)',
+                  borderRadius: 8,
+                  padding: '8px 10px',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 16,
+                  color: 'var(--navy)',
+                  background: 'var(--cream)',
+                }}
+              />
+            </label>
+            <div style={{ height: 1, background: 'var(--cream-dark)' }} />
             <SettingRow label="Tamil you're learning" value="Sri Lankan Tamil" note="Indian Tamil coming soon" />
             <div style={{ height: 1, background: 'var(--cream-dark)' }} />
             <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', gap: 12, cursor: 'pointer' }}>
@@ -284,7 +279,7 @@ export default function ProgressPage() {
               Start fresh?
             </h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: 'var(--stone)', margin: '6px 0 20px', lineHeight: 1.45 }}>
-              This clears your XP, packs, everything you have seen, and your character.
+              This clears your XP, packs, everything you have seen, your name and your character.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <button

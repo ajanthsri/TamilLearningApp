@@ -174,7 +174,7 @@ export function PackFlow({ pack }: { pack: Pack }) {
         </span>
       </div>
 
-      <main key={`${phase}-${index}-${qIndex}`} className="page-enter" style={{ padding: '8px 20px calc(32px + env(safe-area-inset-bottom))', maxWidth: 480, margin: '0 auto' }}>
+      <main key={`${phase}-${index}-${qIndex}`} style={{ animation: 'slideInRight 240ms ease-out backwards', padding: '8px 20px calc(32px + env(safe-area-inset-bottom))', maxWidth: 480, margin: '0 auto' }}>
         {phase === 'intro' && (
           <div style={{ color: '#fff', paddingTop: 24 }}>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: 14, letterSpacing: 3, color: pack.colour === '#6B5B4B' ? 'var(--turmeric)' : pack.colour, filter: 'brightness(1.4)' }}>
@@ -296,7 +296,6 @@ export function PackFlow({ pack }: { pack: Pack }) {
 
         {phase === 'done' && (
           <div style={{ color: '#fff', textAlign: 'center', paddingTop: 28 }}>
-            <Confetti />
             <div style={{ fontFamily: 'var(--font-display)', fontSize: 16, letterSpacing: 3, color: 'var(--turmeric)' }}>PACK {pack.number} COMPLETE</div>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 64, letterSpacing: 1.5, lineHeight: 1, margin: '8px 0 10px', fontWeight: 400, animation: 'levelUpStamp 400ms ease-out both' }}>
               {pack.english}
@@ -352,6 +351,7 @@ export function PackFlow({ pack }: { pack: Pack }) {
         )}
       </main>
 
+      {phase === 'done' && <Confetti />}
       {rewardUI}
       <VictoryOverlay
         visible={victory !== null}

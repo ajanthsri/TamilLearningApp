@@ -52,7 +52,7 @@ export function QuizQuestion({ question, onAnswer, disabled, selected, showNotSu
   }
 
   return (
-    <div key={question.id} style={{ animation: 'questionWipe 260ms ease-out both' }}>
+    <div key={question.id} style={{ animation: 'slideInRight 240ms ease-out backwards' }}>
       <div style={{ fontFamily: 'var(--font-display)', fontSize: 14, letterSpacing: 2, textTransform: 'uppercase', color: muted, marginBottom: 12 }}>
         {question.type === 'word' ? 'What does this mean?' : 'What sound does this letter make?'}
       </div>

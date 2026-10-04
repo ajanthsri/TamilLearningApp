@@ -32,7 +32,7 @@ function dialogueOfTheDay() {
 function Home() {
   const { countSeen, countPractised, isSeen, markSeen } = useProgress()
   const { xp, currentLevel, nextLevel, levelProgress } = useXP()
-  const { character } = useProfile()
+  const { character, name } = useProfile()
   const { packs, isComplete, nextPack, completedCount } = usePacks()
   const { reward, rewardUI } = useReward()
   const dialogue = dialogueOfTheDay()
@@ -76,7 +76,7 @@ function Home() {
           </Link>
           <div style={{ minWidth: 0, flex: 1 }}>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: 34, color: '#fff', letterSpacing: 1, lineHeight: 1 }}>
-              {firstTime ? 'Welcome' : 'Welcome back'}
+              {firstTime ? 'Welcome' : 'Welcome back'}{name ? `, ${name}` : ''}
             </div>
             <div style={{ marginTop: 4 }}>
               <Say tamil={UI.hello.tamil} roman="vanakkam" size={16} colour="var(--turmeric)" button="light" />

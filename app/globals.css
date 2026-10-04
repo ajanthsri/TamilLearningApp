@@ -107,6 +107,22 @@ body::before {
   to   { opacity: 1; clip-path: inset(0 0 0 0); }
 }
 
+/* Route change: opacity only, so fixed elements (nav, overlays) never jump */
+@keyframes routeFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Step changes inside a flow: forward slides in from the right, back from the left */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
 /* Confetti for pack complete */
 @keyframes confettiFall {
   0%   { transform: translate3d(0, -20vh, 0) rotate(0deg); opacity: 1; }
