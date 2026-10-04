@@ -4,8 +4,8 @@ import { usePathname } from 'next/navigation'
 
 const NAV = [
   { href: '/', labelTamil: 'வீடு', label: 'Home' },
-  { href: '/learn', labelTamil: 'கற்க', label: 'Learn' },
-  { href: '/challenge', labelTamil: 'தேர்வு', label: 'Challenge' },
+  { href: '/speak', labelTamil: 'பேசு', label: 'Speak' },
+  { href: '/read', labelTamil: 'படி', label: 'Read' },
   { href: '/write', labelTamil: 'எழுது', label: 'Write' },
   { href: '/progress', labelTamil: 'நிலை', label: 'Stats' },
 ]
@@ -30,7 +30,7 @@ export function NavBar() {
       }}
     >
       {NAV.map(item => {
-        const active = pathname === item.href
+        const active = item.href === '/' ? pathname === '/' : pathname === item.href || pathname.startsWith(`/lesson${item.href}/`)
         return (
           <Link
             key={item.href}

@@ -54,6 +54,24 @@ export function letterQuestion(id: number, index: number): QuizQuestion | null {
   }
 }
 
+/** Hear or see a sound, pick the letter that makes it. Options are letters of the same type. */
+export function shapeQuestion(id: number, index: number): QuizQuestion | null {
+  const l = letters.find(x => x.id === id)
+  if (!l) return null
+  const sameType = letters.filter(x => x.type === l.type).map(x => x.tamil)
+  return {
+    id: `shape-${l.id}-${index}`,
+    type: 'shape',
+    module: 'letters',
+    prompt: l.roman,
+    promptRoman: l.roman,
+    correct: l.tamil,
+    options: shuffle([l.tamil, ...distinct(sameType, l.tamil, 3)]),
+    itemId: l.id,
+    hideRoman: true,
+  }
+}
+
 export function useQuiz(seenWordIds: number[], seenLetterIds: number[], stage: LearnerStage = 'newbie') {
   const [questions, setQuestions] = useState<QuizQuestion[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)

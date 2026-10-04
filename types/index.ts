@@ -124,9 +124,10 @@ export type PlacementSeed = {
 
 export type QuizQuestion = {
   id: string
-  type: 'word' | 'letter'
+  /** word: Tamil → meaning · letter: letter → sound · shape: sound → letter */
+  type: 'word' | 'letter' | 'shape'
   module: ModuleKey
-  prompt: string         // Tamil text
+  prompt: string         // Tamil text (for 'shape', the sound)
   promptRoman: string
   correct: string        // Answer text
   options: string[]      // 4 options including correct

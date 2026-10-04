@@ -13,6 +13,7 @@ import { phrases } from '../data/phrases'
 import { dialogues } from '../data/dialogues'
 import { letters } from '../data/letters'
 import { packs } from '../data/packs'
+import { lessons, TRACKS } from '../data/lessons'
 import { levels } from '../data/levels'
 import { stages } from '../data/stages'
 import { PRAISE, ENCOURAGE, NICE, NUDGE, RESULT, UI } from '../data/copy'
@@ -44,6 +45,8 @@ export function buildRows(): Row[] {
   letters.forEach(l => add('letter', l.id, l.tamil, l.roman, `Letter ${l.roman}`))
   letters.forEach(l => add('example', l.id, l.example.tamil, l.example.roman, l.example.english))
   packs.forEach(p => add('pack', p.number, p.tamil, p.roman, p.english))
+  Object.values(TRACKS).forEach((t, i) => add('track', i + 1, t.tamil, t.roman, t.english))
+  lessons.forEach((l, i) => add('lesson', i + 1, l.tamil, l.roman, l.english))
   levels.forEach(l => add('level', l.level, l.tamil, l.roman, l.english))
   stages.forEach((s, i) => add('stage', i + 1, s.tamil, s.roman, s.english))
   let i = 0

@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { NavBar } from '@/components/ui/NavBar'
 import { XPBar } from '@/components/ui/XPBar'
@@ -17,7 +18,9 @@ import { ModuleKey } from '@/types'
 import { Avatar } from '@/components/ui/Avatar'
 import { useProfile, NAME_MAX } from '@/hooks/useProfile'
 import { useXP } from '@/hooks/useXP'
-import { PACKS_KEY, usePacks } from '@/hooks/usePacks'
+import { useLessons } from '@/hooks/useLessons'
+import { TRACKS, TRACK_ORDER, lessonsFor } from '@/data/lessons'
+import { TrackIcon } from '@/components/lesson/TrackIcon'
 import { SHOW_STAGE_SELECTION } from '@/lib/config'
 
 const MODULES: { key: ModuleKey; tamil: string; label: string; total: number }[] = [
@@ -35,7 +38,7 @@ export default function ProgressPage() {
   const { character, sfx, setSfx, resetProfile, name, setName } = useProfile()
   const [nameDraft, setNameDraft] = useState<string | null>(null)
   const { currentLevel } = useXP()
-  const { packs, isComplete, completedCount } = usePacks()
+  const { countDone, resetLessons } = useLessons()
   const [confirming, setConfirming] = useState(false)
   const cancelRef = useRef<HTMLButtonElement>(null)
 
@@ -47,7 +50,7 @@ export default function ProgressPage() {
     removeStore(PROGRESS_KEY)
     removeStore(XP_KEY)
     removeStore(AWARDED_KEY)
-    removeStore(PACKS_KEY)
+    resetLessons()
     resetProfile()
     resetOnboarding()
     setConfirming(false)
@@ -89,17 +92,33 @@ export default function ProgressPage() {
 
         {hydrated && <XPBar variant="light" />}
 
-        {/* Packs */}
-        <section aria-labelledby="packs-heading">
-          <SectionTitle id="packs-heading" tamil="பாடங்கள்" label={`Packs · ${hydrated ? completedCount : 0} of ${packs.length} done`} />
-          <div style={{ display: 'flex', gap: 6 }}>
-            {packs.map(p => (
-              <div
-                key={p.id}
-                title={p.english}
-                style={{ flex: 1, height: 10, borderRadius: 5, background: hydrated && isComplete(p.id) ? 'var(--vermillion)' : 'var(--cream-dark)' }}
-              />
-            ))}
+        {/* Tracks */}
+        <section aria-labelledby="tracks-heading">
+          <SectionTitle id="tracks-heading" tamil="பாடங்கள்" label="Your three skills" />
+          <div style={{ background: 'var(--white)', border: '1.5px solid var(--cream-dark)', borderRadius: 'var(--radius-lg)', padding: '6px 14px' }}>
+            {TRACK_ORDER.map((t, i) => {
+              const info = TRACKS[t]
+              const total = lessonsFor(t).length
+              const d = hydrated ? countDone(t) : 0
+              return (
+                <Link
+                  key={t}
+                  href={`/${t}`}
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderTop: i ? '1px solid var(--cream-dark)' : 'none', textDecoration: 'none', color: 'var(--navy)' }}
+                >
+                  <span style={{ color: info.ink }}>
+                    <TrackIcon track={t} size={24} />
+                  </span>
+                  <span style={{ fontFamily: 'var(--font-display)', fontSize: 19, letterSpacing: 1, width: 62 }}>{info.english}</span>
+                  <span style={{ flex: 1, height: 8, borderRadius: 4, background: 'var(--cream-dark)', overflow: 'hidden' }}>
+                    <span style={{ display: 'block', width: `${(d / total) * 100}%`, height: '100%', background: info.colour }} />
+                  </span>
+                  <span style={{ fontFamily: 'var(--font-display)', fontSize: 15, letterSpacing: 1, color: 'var(--stone)', width: 34, textAlign: 'right' }}>
+                    {d}/{total}
+                  </span>
+                </Link>
+              )
+            })}
           </div>
         </section>
 

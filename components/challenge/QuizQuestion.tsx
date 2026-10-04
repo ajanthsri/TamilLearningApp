@@ -17,15 +17,24 @@ interface Props {
   dark?: boolean
 }
 
+const LABEL: Record<Q['type'], string> = {
+  word: 'What does this mean?',
+  letter: 'What sound does this letter make?',
+  shape: 'Which letter makes this sound?',
+}
+
 export function QuizQuestion({ question, onAnswer, disabled, selected, showNotSure, autoPlay, dark }: Props) {
   const { speak, isAvailable } = useSpeech()
+  const isShape = question.type === 'shape'
+  // What the play button says: the Tamil on screen, or for 'shape' the letter being asked for
+  const audioText = isShape ? question.correct : question.prompt
 
   useEffect(() => {
     if (autoPlay && isAvailable) {
-      const t = setTimeout(() => speak(question.prompt), 250)
+      const t = setTimeout(() => speak(audioText), 250)
       return () => clearTimeout(t)
     }
-  }, [question.id, autoPlay, isAvailable, speak, question.prompt])
+  }, [question.id, autoPlay, isAvailable, speak, audioText])
 
   const answered = selected !== null
   const ink = dark ? '#fff' : 'var(--navy)'
@@ -37,24 +46,27 @@ export function QuizQuestion({ question, onAnswer, disabled, selected, showNotSu
     let background = dark ? 'rgba(255,255,255,0.04)' : 'var(--white)'
     let border = dark ? '1.5px solid rgba(255,255,255,0.2)' : '1.5px solid var(--navy)'
     let color = ink
+    let animation = 'none'
     if (answered && isCorrect) {
       background = 'var(--turmeric)'
       border = '1.5px solid var(--turmeric)'
       color = 'var(--navy)'
+      animation = 'popIn 260ms ease-out'
     } else if (answered && isPicked) {
       background = 'var(--error-soft)'
       border = '1.5px solid var(--error-soft)'
       color = 'var(--navy)'
+      animation = 'nudge 320ms ease-in-out'
     } else if (answered) {
       color = muted
     }
-    return { background, border, color }
+    return { background, border, color, animation }
   }
 
   return (
     <div key={question.id} style={{ animation: 'slideInRight 240ms ease-out backwards' }}>
       <div style={{ fontFamily: 'var(--font-display)', fontSize: 14, letterSpacing: 2, textTransform: 'uppercase', color: muted, marginBottom: 12 }}>
-        {question.type === 'word' ? 'What does this mean?' : 'What sound does this letter make?'}
+        {LABEL[question.type]}
       </div>
 
       <div
@@ -70,40 +82,38 @@ export function QuizQuestion({ question, onAnswer, disabled, selected, showNotSu
         }}
       >
         <div style={{ minWidth: 0 }}>
-          <div
-            lang="ta"
-            style={{
-              fontFamily: 'var(--font-tamil)',
-              fontSize: question.type === 'letter' ? 64 : 40,
-              color: 'var(--turmeric)',
-              lineHeight: 1.2,
-            }}
-          >
-            {question.prompt}
-          </div>
-          {!question.hideRoman && (
-            <div style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 15, color: 'rgba(255,255,255,0.6)' }}>
-              {question.promptRoman}
+          {isShape ? (
+            <div style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 56, color: 'var(--turmeric)', lineHeight: 1.1 }}>
+              “{question.prompt}”
+            </div>
+          ) : (
+            <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: question.type === 'letter' ? 64 : 40, color: 'var(--turmeric)', lineHeight: 1.2 }}>
+              {question.prompt}
             </div>
           )}
+          {!question.hideRoman && (
+            <div style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 15, color: 'rgba(255,255,255,0.6)' }}>{question.promptRoman}</div>
+          )}
         </div>
-        <AudioButton text={question.prompt} size="lg" />
+        <AudioButton text={audioText} size="lg" label={isShape ? 'Hear the sound' : undefined} />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isShape ? 'repeat(4, minmax(0, 1fr))' : 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
         {question.options.map(opt => (
           <button
             key={opt}
             onClick={() => onAnswer(opt)}
             disabled={disabled}
-            className="tappable"
+            className="tappable btn-option"
+            lang={isShape ? 'ta' : undefined}
+            aria-label={isShape ? `Letter ${opt}` : undefined}
             style={{
               ...optionStyle(opt),
               borderRadius: 'var(--radius)',
-              padding: '14px 10px',
-              minHeight: 56,
-              fontFamily: 'var(--font-body)',
-              fontSize: question.type === 'letter' ? 22 : 15,
+              padding: isShape ? 0 : '14px 10px',
+              minHeight: isShape ? 72 : 56,
+              fontFamily: isShape ? 'var(--font-tamil)' : 'var(--font-body)',
+              fontSize: isShape ? 34 : question.type === 'letter' ? 22 : 15,
               fontStyle: question.type === 'letter' ? 'italic' : 'normal',
               lineHeight: 1.25,
               cursor: disabled ? 'default' : 'pointer',
