@@ -23,15 +23,15 @@ To see onboarding again, use Progress → Reset all progress, or clear site data
 
 | Folder | What's in it |
 |---|---|
-| `app/` | Routes: `/`, `/pack/[id]`, `/learn`, `/challenge`, `/write`, `/progress` (Stats) |
+| `app/` | Routes: `/`, `/speak`, `/read`, `/write`, `/lesson/[track]/[id]`, `/learn`, `/challenge`, `/progress` (Stats). `/pack/:id` redirects to Speak lessons |
 | `components/` | `ui/` shared pieces, `cards/` Learn cards, `challenge/`, `onboarding/`, `write/` |
-| `data/` | All content: words, phrases, dialogues, packs, avatars, and `copy.ts` for Tamil UI lines. Sri Lankan Tamil |
+| `data/` | All content: words, phrases, dialogues, film lines, packs, lessons (the three tracks), badges, avatars, and `copy.ts` for Tamil UI lines. Sri Lankan Tamil |
 | `hooks/` | `useProgress`, `useXP`, `useQuiz`, `useSpeech`, `useLearnerStage` |
 | `lib/store.ts` | Shared localStorage store, so every screen sees the same XP and progress |
 
 ## localStorage keys
 
-`tamil-progress`, `tamil-xp`, `tamil-xp-awarded` (one-time XP tags), `tamil-stage`, `tamil-onboarding-complete`, `tamil-packs-complete`, `tamil-avatar`, `tamil-dialect`, `tamil-sfx`.
+`tamil-progress`, `tamil-xp`, `tamil-xp-awarded` (one-time XP tags), `tamil-stage`, `tamil-onboarding-complete`, `tamil-lessons-complete` (plus the older `tamil-packs-complete`), `tamil-last-track`, `tamil-avatar`, `tamil-name`, `tamil-dialect`, `tamil-sfx`, `tamil-badges-seen`, `tamil-challenge-best`.
 
 ## Audio: recording real voices
 
@@ -45,4 +45,4 @@ If you change any Tamil text in `data/`, run `npm run audio:list` again so the l
 
 ## Switches
 
-`lib/config.ts`: `SHOW_STAGE_SELECTION` turns the Newbie / Intermediate / Advanced choice back on.
+`lib/config.ts`: `SHOW_STAGE_SELECTION` turns the Newbie / Intermediate / Advanced choice back on. `SHOW_FILM_LINES` turns the real film lines on or off.

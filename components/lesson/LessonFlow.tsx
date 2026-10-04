@@ -381,11 +381,11 @@ export function LessonFlow({ lesson }: { lesson: Lesson }) {
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, marginTop: 30 }}>
               {nextInTrack ? (
-                <Link href={`/lesson/${nextInTrack.track}/${nextInTrack.id}`} className="tappable" style={bigLinkStyle}>
+                <Link href={`/lesson/${nextInTrack.track}/${nextInTrack.id}`} className="btn-primary" style={bigLinkStyle}>
                   Next: {nextInTrack.english} →
                 </Link>
               ) : (
-                <Link href="/" className="tappable" style={bigLinkStyle}>
+                <Link href="/" className="btn-primary" style={bigLinkStyle}>
                   {track.english} track done. Home →
                 </Link>
               )}
@@ -412,17 +412,7 @@ export function LessonFlow({ lesson }: { lesson: Lesson }) {
   )
 }
 
-const bigLinkStyle = {
-  background: 'var(--vermillion)',
-  color: '#fff',
-  borderRadius: 'var(--radius)',
-  padding: '15px 30px',
-  fontFamily: 'var(--font-display)',
-  fontSize: 22,
-  letterSpacing: 1.5,
-  textDecoration: 'none',
-  boxShadow: 'var(--shadow-heavy)',
-} as const
+const bigLinkStyle = { padding: '15px 30px', fontSize: 22 } as const
 
 function Chip({ children }: { children: React.ReactNode }) {
   return (
@@ -434,24 +424,7 @@ function Chip({ children }: { children: React.ReactNode }) {
 
 function BigButton({ onClick, disabled, children }: { onClick: () => void; disabled?: boolean; children: React.ReactNode }) {
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className="tappable"
-      style={{
-        background: disabled ? 'var(--cream-dark)' : 'var(--vermillion)',
-        color: disabled ? 'var(--stone-light)' : '#fff',
-        border: 'none',
-        borderRadius: 'var(--radius)',
-        padding: '15px 30px',
-        fontFamily: 'var(--font-display)',
-        fontSize: 22,
-        letterSpacing: 1.5,
-        boxShadow: disabled ? 'none' : 'var(--shadow-card)',
-        cursor: disabled ? 'default' : 'pointer',
-        transition: 'background 150ms ease-out',
-      }}
-    >
+    <button onClick={onClick} disabled={disabled} className="btn-primary" style={{ padding: '15px 30px', fontSize: 22 }}>
       {children}
     </button>
   )
@@ -466,20 +439,15 @@ function HearButton({ text, onPlay }: { text: string; onPlay: () => void }) {
         speak(text)
         onPlay()
       }}
-      className="tappable"
+      className="btn-primary"
       aria-label="Hear it in Tamil"
       style={{
         display: 'inline-flex',
         alignItems: 'center',
         gap: 10,
-        background: 'var(--vermillion)',
-        color: '#fff',
-        border: 'none',
         borderRadius: 30,
         padding: '12px 24px 12px 16px',
-        fontFamily: 'var(--font-display)',
         fontSize: 20,
-        letterSpacing: 1.5,
         animation: isSpeaking ? 'audioPulse 600ms ease-out' : 'none',
       }}
     >

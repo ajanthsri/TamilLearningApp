@@ -393,23 +393,7 @@ function Kicker({ children }: { children: ReactNode }) {
 
 function Primary({ onClick, disabled, children }: { onClick: () => void; disabled?: boolean; children: ReactNode }) {
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className="tappable"
-      style={{
-        background: disabled ? 'rgba(255,255,255,0.12)' : 'var(--vermillion)',
-        color: disabled ? 'rgba(255,255,255,0.4)' : '#fff',
-        border: 'none',
-        borderRadius: 'var(--radius)',
-        padding: '14px 30px',
-        fontFamily: 'var(--font-display)',
-        fontSize: 20,
-        letterSpacing: 1.5,
-        cursor: disabled ? 'default' : 'pointer',
-        transition: 'background 150ms ease-out',
-      }}
-    >
+    <button onClick={onClick} disabled={disabled} className="btn-primary" style={{ padding: '14px 30px', fontSize: 20 }}>
       {children}
     </button>
   )

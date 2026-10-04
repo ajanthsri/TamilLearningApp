@@ -13,6 +13,7 @@ import { pickRandom } from '@/lib/store'
 import { XP_VALUES } from '@/types'
 import { ENCOURAGE, RESULT } from '@/data/copy'
 import { Say } from '@/components/ui/Say'
+import { recordChallengeScore } from '@/hooks/useBadges'
 
 
 function resultCopy(score: number) {
@@ -66,6 +67,7 @@ export default function ChallengePage() {
     bonusGiven.current = true
     // The last answer was recorded on an earlier render, so answers is complete here
     const score = Object.values(quiz.answers).filter(Boolean).length
+    recordChallengeScore(score)
     if (score >= 3) {
       const r = addXP('quiz_completed')
       setBonus(r.gained)
@@ -197,20 +199,7 @@ export default function ChallengePage() {
               </div>
             )}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
-              <Link
-                href="/learn"
-                className="tappable"
-                style={{
-                  background: 'var(--vermillion)',
-                  color: '#fff',
-                  borderRadius: 'var(--radius)',
-                  padding: '12px 28px',
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 18,
-                  letterSpacing: 1.5,
-                  textDecoration: 'none',
-                }}
-              >
+              <Link href="/learn" className="btn-primary" style={{ padding: '12px 28px', fontSize: 18 }}>
                 Explore more →
               </Link>
               <button
@@ -241,21 +230,7 @@ export default function ChallengePage() {
 
 function PrimaryButton({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
   return (
-    <button
-      onClick={onClick}
-      className="tappable"
-      style={{
-        background: 'var(--vermillion)',
-        color: '#fff',
-        border: 'none',
-        borderRadius: 'var(--radius)',
-        padding: '12px 28px',
-        fontFamily: 'var(--font-display)',
-        fontSize: 18,
-        letterSpacing: 1.5,
-        boxShadow: 'var(--shadow-card)',
-      }}
-    >
+    <button onClick={onClick} className="btn-primary" style={{ padding: '12px 28px', fontSize: 18 }}>
       {children}
     </button>
   )

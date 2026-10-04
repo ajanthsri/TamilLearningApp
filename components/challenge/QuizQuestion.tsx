@@ -104,11 +104,12 @@ export function QuizQuestion({ question, onAnswer, disabled, selected, showNotSu
             key={opt}
             onClick={() => onAnswer(opt)}
             disabled={disabled}
-            className="tappable btn-option"
+            className="chunky"
             lang={isShape ? 'ta' : undefined}
             aria-label={isShape ? `Letter ${opt}` : undefined}
             style={{
               ...optionStyle(opt),
+              ['--edge' as string]: answered ? 'transparent' : dark ? 'rgba(0,0,0,0.45)' : 'var(--navy)',
               borderRadius: 'var(--radius)',
               padding: isShape ? 0 : '14px 10px',
               minHeight: isShape ? 72 : 56,
@@ -117,7 +118,6 @@ export function QuizQuestion({ question, onAnswer, disabled, selected, showNotSu
               fontStyle: question.type === 'letter' ? 'italic' : 'normal',
               lineHeight: 1.25,
               cursor: disabled ? 'default' : 'pointer',
-              transition: 'background 150ms ease-out, color 150ms ease-out',
             }}
           >
             {opt}

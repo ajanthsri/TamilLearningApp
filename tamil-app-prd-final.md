@@ -1,6 +1,62 @@
 # தமிழ் — Tamil Learning App
 ## Build-Ready PRD · POC Version
-### Last updated: 4 October 2026 · Newbie focus, Sri Lankan Tamil first
+### Last updated: 4 October 2026 · Round 3: Speak, Read, Write tracks
+
+---
+
+## Round 3 Update (4 October 2026, evening)
+
+**Overrides anything below that conflicts.** It comes from AJ's full walkthrough of the live app.
+
+### Three tracks: Speak, Read, Write
+| Track | Lessons | Learn screen | Check |
+|---|---|---|---|
+| Speak (பேசு) | The 6 packs | Word, romanisation, Hear it, meaning | 3× Tamil → meaning |
+| Read (படி) | First vowels · More vowels · First consonants · then "Read:" each pack's words | Letters with sound and example; words with **no romanisation** until revealed | Letter → sound; word (no roman) → meaning |
+| Write (எழுது) | First shapes · More vowel shapes · Consonant shapes | One letter per screen | Sound → pick the letter (`shape` question) |
+
+- Data: `data/lessons.ts`. Engine: `components/lesson/LessonFlow.tsx` (replaces PackFlow and WritingPractice). Paths: `components/lesson/TrackPage.tsx` at `/speak`, `/read`, `/write`. Lessons at `/lesson/[track]/[id]`. `/pack/:id` redirects to `/lesson/speak/:id`.
+- Progress: `tamil-lessons-complete` (`track:id`). Packs finished earlier still count. `tamil-last-track` drives the Home Continue card. Completion pays `pack_completed` (40 XP) once per lesson.
+- Nothing is locked. Read word lessons show "Best after Speak: …".
+
+### Home and nav
+- Home: hero (avatar, "Welcome back, {name}", level and XP), Continue card, three skill tiles (icon, Tamil with play, progress), cinema line of the day, Practise row (Challenge, Browse all).
+- Nav: Home · Speak · Read · Write · Stats.
+
+### Onboarding and profile
+- Optional name on the character screen (`tamil-name`, up to 20 characters). It's editable on Stats.
+- The character **can't be changed** after onboarding. It grows with your level.
+
+### Learn
+- Words: pick a topic (6 tiles), then a 2-column grid of flip tiles. Phrases are grouped by situation.
+- Dialogues: "From the films" and "Originals" sections.
+
+### Real film lines
+- `data/film-lines.ts`: 6 credited lines:
+  - Rajinikanth: Baashha, Padayappa, Muthu, Sivaji
+  - Vijay: Pokkiri
+  - Kamal Haasan: Nayakan
+- Text only, with a word breakdown. Each card shows "Actor · Film (year)" and "Quoted for learning. Film Tamil (Chennai)."
+- They alternate with the originals as the line of the day. `SHOW_FILM_LINES` in `lib/config.ts` turns them all off.
+- **Get an IP solicitor's view before any public launch.** Rajinikanth has publicly warned against unauthorised commercial use of his name, image and voice.
+
+### Feel
+- Transitions:
+  - Every route fades in (opacity only, so fixed elements never jump).
+  - Steps slide in: onboarding (Back slides from the left), lesson screens, questions, Learn tabs and topics.
+- Chunky poster buttons (`.btn-primary`) and tiles and answer options (`.chunky`): a solid bottom edge that presses down on tap.
+- Answers: a correct option pops (`popIn`); a wrong one nudges sideways (`nudge`).
+- Track icons (speech bubble, book, pen). "DONE" stamps on finished lessons.
+- **Badges** (`data/badges.ts`): 9 milestones worked out from existing progress, including first word, Vanakkam!, Letter reader, Shape spotter, Century, Student, Film fan, Perfect five and Chatterbox.
+  - Each new badge gets a once-only celebration on Home (`tamil-badges-seen`). The best challenge score is stored for Perfect five (`tamil-challenge-best`).
+  - Stats shows them all, with locked badges greyed.
+- Drum sounds only start after the first tap on a page (browser rule).
+
+### New localStorage keys
+`tamil-name`, `tamil-lessons-complete`, `tamil-last-track`, `tamil-badges-seen`, `tamil-challenge-best`. Reset clears them all.
+
+### Recording list
+196 lines now, including track names, lesson titles, film lines and their words, and badge names.
 
 ---
 

@@ -13,6 +13,8 @@ import { useLearnerStage } from '@/hooks/useLearnerStage'
 import { useXP } from '@/hooks/useXP'
 import { useProfile } from '@/hooks/useProfile'
 import { useLessons } from '@/hooks/useLessons'
+import { useBadges } from '@/hooks/useBadges'
+import { BadgeCelebration } from '@/components/ui/Badge'
 import { dialogues } from '@/data/dialogues'
 import { TRACKS, TRACK_ORDER, lessonsFor } from '@/data/lessons'
 import { UI } from '@/data/copy'
@@ -37,6 +39,7 @@ function Home() {
   const { character, name } = useProfile()
   const { continueLesson, countDone, nextLesson } = useLessons()
   const { reward, rewardUI } = useReward()
+  const { fresh, markCelebrated } = useBadges()
   const dialogue = dialogueOfTheDay()
 
   const firstTime = MODULES.reduce((n, m) => n + countSeen(m), 0) === 0
@@ -107,11 +110,12 @@ function Home() {
         <section aria-labelledby="continue-heading">
           {next && nextTrack ? (
             <div
+              className="chunky"
               style={{
+                ['--edge' as string]: '#7A1519',
                 position: 'relative',
                 background: 'var(--vermillion)',
                 borderRadius: 20,
-                boxShadow: '0 10px 30px rgba(193,39,45,0.35)',
                 overflow: 'hidden',
                 color: '#fff',
               }}
@@ -164,12 +168,13 @@ function Home() {
               return (
                 <div
                   key={t}
+                  className="chunky"
                   style={{
+                    ['--edge' as string]: '#0D1024',
                     position: 'relative',
                     background: 'var(--navy)',
                     borderRadius: 'var(--radius-lg)',
                     borderTop: `5px solid ${info.colour}`,
-                    boxShadow: 'var(--shadow-card)',
                     animation: `stampIn 180ms ${i * 60}ms ease-out backwards`,
                   }}
                 >
@@ -236,15 +241,15 @@ function Home() {
               <Link
                 key={card.href}
                 href={card.href}
-                className="tappable"
+                className="chunky"
                 style={{
+                  ['--edge' as string]: '#0D1024',
                   position: 'relative',
                   overflow: 'hidden',
                   background: card.bg,
                   borderRadius: 'var(--radius-lg)',
                   padding: '14px 14px 12px',
                   textDecoration: 'none',
-                  boxShadow: 'var(--shadow-card)',
                   borderTop: `4px solid ${card.accent}`,
                   minHeight: 104,
                   display: 'flex',
@@ -269,6 +274,7 @@ function Home() {
       </main>
 
       {rewardUI}
+      {fresh.length > 0 && <BadgeCelebration badge={fresh[0]} remaining={fresh.length - 1} onDone={() => markCelebrated(fresh[0].id)} />}
       <NavBar />
     </div>
   )

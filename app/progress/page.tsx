@@ -19,6 +19,8 @@ import { Avatar } from '@/components/ui/Avatar'
 import { useProfile, NAME_MAX } from '@/hooks/useProfile'
 import { useXP } from '@/hooks/useXP'
 import { useLessons } from '@/hooks/useLessons'
+import { useBadges } from '@/hooks/useBadges'
+import { Medal } from '@/components/ui/Badge'
 import { TRACKS, TRACK_ORDER, lessonsFor } from '@/data/lessons'
 import { TrackIcon } from '@/components/lesson/TrackIcon'
 import { SHOW_STAGE_SELECTION } from '@/lib/config'
@@ -39,6 +41,7 @@ export default function ProgressPage() {
   const [nameDraft, setNameDraft] = useState<string | null>(null)
   const { currentLevel } = useXP()
   const { countDone, resetLessons } = useLessons()
+  const { all: allBadges, isEarned, earned: earnedBadges, resetBadges } = useBadges()
   const [confirming, setConfirming] = useState(false)
   const cancelRef = useRef<HTMLButtonElement>(null)
 
@@ -51,6 +54,7 @@ export default function ProgressPage() {
     removeStore(XP_KEY)
     removeStore(AWARDED_KEY)
     resetLessons()
+    resetBadges()
     resetProfile()
     resetOnboarding()
     setConfirming(false)
@@ -91,6 +95,35 @@ export default function ProgressPage() {
         )}
 
         {hydrated && <XPBar variant="light" />}
+
+        {/* Badges */}
+        <section aria-labelledby="badges-heading">
+          <SectionTitle id="badges-heading" tamil="பதக்கங்கள்" label={`Badges · ${hydrated ? earnedBadges.length : 0} of ${allBadges.length}`} />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10 }}>
+            {allBadges.map(b => {
+              const got = hydrated && isEarned(b.id)
+              return (
+                <div
+                  key={b.id}
+                  style={{
+                    background: got ? 'var(--white)' : 'transparent',
+                    border: got ? '1.5px solid var(--cream-dark)' : '1.5px dashed var(--stone-light)',
+                    borderRadius: 'var(--radius-lg)',
+                    padding: '10px 6px 10px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                  }}
+                >
+                  <Medal badge={b} earned={got} size={64} />
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 15, letterSpacing: 0.5, color: got ? 'var(--navy)' : 'var(--stone)', marginTop: 4, lineHeight: 1.1 }}>{b.title}</div>
+                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: 'var(--stone)', marginTop: 2, lineHeight: 1.3 }}>{b.how}</div>
+                </div>
+              )
+            })}
+          </div>
+        </section>
 
         {/* Tracks */}
         <section aria-labelledby="tracks-heading">

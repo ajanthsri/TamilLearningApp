@@ -165,6 +165,45 @@ button { font: inherit; }
   .tappable:hover { filter: brightness(1.06); }
 }
 
+/* ── Chunky poster buttons: a solid bottom edge that presses down on tap ── */
+.btn-primary {
+  background: var(--vermillion);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--font-display);
+  letter-spacing: 1.5px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #7A1519, 0 10px 20px rgba(193, 39, 45, 0.25);
+  transition: transform 80ms ease-out, box-shadow 80ms ease-out, background 150ms ease-out;
+}
+.btn-primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #7A1519, 0 3px 8px rgba(193, 39, 45, 0.2);
+}
+.btn-primary:disabled {
+  background: var(--cream-dark);
+  color: var(--stone-light);
+  box-shadow: none;
+  transform: none;
+  cursor: default;
+}
+
+/* Answer options and tiles: same press, colour comes from --edge */
+.chunky {
+  box-shadow: 0 4px 0 var(--edge, rgba(26, 31, 60, 0.9));
+  transition: transform 80ms ease-out, box-shadow 80ms ease-out, background 150ms ease-out, color 150ms ease-out;
+}
+.chunky:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--edge, rgba(26, 31, 60, 0.9));
+}
+
 :focus-visible {
   outline: 2px solid var(--turmeric);
   outline-offset: 2px;

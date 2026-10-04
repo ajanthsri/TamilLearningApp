@@ -7,9 +7,16 @@ import { getStore } from './store'
  */
 let ctx: AudioContext | null = null
 
+/** Browsers only allow sound after the person has tapped something on the page. */
+function userHasTapped(): boolean {
+  const ua = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation
+  return ua ? ua.hasBeenActive : true
+}
+
 function audio(): AudioContext | null {
   if (typeof window === 'undefined') return null
   if (!getStore<boolean>('tamil-sfx', true)) return null
+  if (!ctx && !userHasTapped()) return null
   try {
     ctx ??= new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)()
     if (ctx.state === 'suspended') void ctx.resume()

@@ -227,12 +227,13 @@ function LearnContent() {
               return (
                 <div
                   key={t.category}
+                  className="chunky"
                   style={{
+                    ['--edge' as string]: '#0D1024',
                     position: 'relative',
                     background: 'var(--navy)',
                     borderRadius: 'var(--radius-lg)',
                     borderTop: `5px solid ${t.pack.colour}`,
-                    boxShadow: 'var(--shadow-card)',
                     animation: `stampIn 180ms ${i * 50}ms ease-out backwards`,
                   }}
                 >

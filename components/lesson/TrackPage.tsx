@@ -71,7 +71,9 @@ export function TrackPage({ track }: { track: Track }) {
 
                 {/* Card */}
                 <div
+                  className="chunky"
                   style={{
+                    ['--edge' as string]: finished ? '#0D1024' : isCurrent ? info.colour : 'var(--cream-dark)',
                     flex: 1,
                     minWidth: 0,
                     position: 'relative',
@@ -79,7 +81,6 @@ export function TrackPage({ track }: { track: Track }) {
                     color: finished ? '#fff' : 'var(--navy)',
                     border: isCurrent ? `2.5px solid ${info.colour}` : finished ? '2px solid var(--navy)' : '2px solid var(--cream-dark)',
                     borderRadius: 'var(--radius-lg)',
-                    boxShadow: isCurrent ? 'var(--shadow-heavy)' : 'var(--shadow-card)',
                     overflow: 'hidden',
                   }}
                 >
@@ -96,19 +97,7 @@ export function TrackPage({ track }: { track: Track }) {
                     {isCurrent && <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--stone)', marginTop: 6, lineHeight: 1.4 }}>{l.blurb}</p>}
                     {l.hint && !finished && <div style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 12, color: info.ink, marginTop: 4 }}>{l.hint}</div>}
                     {isCurrent && (
-                      <span
-                        style={{
-                          display: 'inline-block',
-                          marginTop: 12,
-                          background: 'var(--vermillion)',
-                          color: '#fff',
-                          fontFamily: 'var(--font-display)',
-                          fontSize: 18,
-                          letterSpacing: 1.5,
-                          padding: '8px 18px',
-                          borderRadius: 20,
-                        }}
-                      >
+                      <span className="btn-primary" style={{ marginTop: 12, fontSize: 18, padding: '8px 18px', borderRadius: 20 }}>
                         {done === 0 ? 'Start →' : 'Continue →'}
                       </span>
                     )}
