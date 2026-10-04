@@ -113,7 +113,7 @@ body::before {
 }
 
 .stamp {
-  animation: stampIn 180ms ease-out both;
+  animation: stampIn 180ms ease-out backwards;
 }
 
 button { font: inherit; }
