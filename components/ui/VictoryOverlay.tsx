@@ -1,18 +1,8 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { pickRandom } from '@/lib/store'
+import { PRAISE } from '@/data/copy'
 
-const PRAISE = [
-  { tamil: 'அது சரிதான்!', english: "That's exactly right." },
-  { tamil: 'பாரு!', english: 'Look at you go.' },
-  { tamil: 'நல்லா சொன்னே.', english: 'Well said.' },
-  { tamil: 'சரியா சொன்னே!', english: 'Perfect.' },
-  { tamil: 'ஆமா!', english: "Yes, you've got it." },
-  { tamil: 'பாட்டி பெருமைப்படுவாங்க.', english: 'Paati would be proud.' },
-  { tamil: 'தெரியும் உனக்கு.', english: 'You already knew that.' },
-  { tamil: 'அழகா சொன்னே.', english: 'Beautifully said.' },
-  { tamil: 'சரி சரி!', english: "That's it!" },
-]
 
 const FLASH_MS = 280
 const DISMISS_MS = 1800

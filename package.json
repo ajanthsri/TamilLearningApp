@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "tsx scripts/audio-manifest.ts && next dev",
+    "prebuild": "tsx scripts/audio-manifest.ts",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "audio:list": "tsx scripts/recording-list.ts",
+    "audio:manifest": "tsx scripts/audio-manifest.ts"
   },
   "dependencies": {
     "@fontsource/bebas-neue": "^5.3.0",
@@ -24,6 +27,7 @@
     "autoprefixer": "^10.0.1",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }

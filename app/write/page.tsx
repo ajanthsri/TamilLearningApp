@@ -63,7 +63,7 @@ export default function WritePage() {
         {phase === 'done' && (
           <div className="page-enter" style={{ textAlign: 'center', padding: '24px 8px' }}>
             <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 30, color: 'var(--navy)' }}>
-              நல்லா எழுதினே.
+              நல்லாச் செய்தீங்க.
             </div>
             <p style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 15, color: 'var(--stone)', margin: '4px 0 16px' }}>
               You did it. Five shapes closer to reading Tamil.
@@ -104,7 +104,7 @@ export default function WritePage() {
       </main>
       <VictoryOverlay
         visible={levelUp !== null}
-        tamil="நல்லா எழுதினே"
+        tamil="நல்லாச் செய்தீங்க"
         xpGained={xp}
         isLevelUp
         levelName={levelUp?.name}

@@ -11,21 +11,14 @@ import { useXP } from '@/hooks/useXP'
 import { useLearnerStage } from '@/hooks/useLearnerStage'
 import { pickRandom } from '@/lib/store'
 import { XP_VALUES } from '@/types'
+import { ENCOURAGE, RESULT } from '@/data/copy'
 
-const ENCOURAGE = [
-  (a: string) => ({ tamil: 'கிட்டத்தட்ட.', english: `Almost. It was “${a}”.` }),
-  () => ({ tamil: 'நெருங்கிட்டே.', english: "You're getting there." }),
-  () => ({ tamil: 'இந்த முறை இல்ல.', english: "But you'll get it next time." }),
-  () => ({ tamil: 'கேளு.', english: 'Listen one more time.' }),
-  () => ({ tamil: 'பரவாயில்ல.', english: "Don't worry. Even appa forgot this one." }),
-  () => ({ tamil: 'இல்ல, ஆனா நெருங்கிட்டே.', english: 'Not quite, but very close.' }),
-]
 
 function resultCopy(score: number) {
-  if (score === 5) return { tamil: 'ஐந்துக்கு ஐந்து!', english: 'Perfect. Paati would be proud.' }
-  if (score === 4) return { tamil: 'நல்லா இருக்கு.', english: 'Really good. Explore more and come back.' }
-  if (score === 3) return { tamil: 'தொடர்ந்து படி.', english: 'Keep going. Every word you hear stays with you.' }
-  return { tamil: 'ஆரம்பம்தான்.', english: 'Every expert was once a beginner. Explore more and try again.' }
+  if (score === 5) return RESULT.perfect
+  if (score === 4) return RESULT.great
+  if (score === 3) return RESULT.good
+  return RESULT.start
 }
 
 type Victory = { tamil: string; xp: number; levelUp: boolean; levelName?: string; levelEnglish?: string }
@@ -96,7 +89,8 @@ export default function ChallengePage() {
         levelEnglish: `${r.newLevel.roman} · ${r.newLevel.english}`,
       })
     } else {
-      setEncourage(pickRandom(ENCOURAGE)(q.correct))
+      const line = pickRandom(ENCOURAGE)
+      setEncourage({ tamil: line.tamil, english: line.english.replace('{answer}', q.correct) })
       nextTimer.current = setTimeout(() => setShowNext(true), 1500)
     }
   }

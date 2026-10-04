@@ -6,22 +6,12 @@ import { AudioButton } from '@/components/ui/AudioButton'
 import { useProgress } from '@/hooks/useProgress'
 import { useXP } from '@/hooks/useXP'
 import { pickRandom, shuffle } from '@/lib/store'
+import { NICE, NUDGE } from '@/data/copy'
 
 // First five vowels: அ ஆ இ ஈ உ
 const TARGET_IDS = [1, 2, 3, 4, 5]
 const VOWELS = letters.filter(l => l.type === 'vowel')
 
-const PRAISE = [
-  { tamil: 'சரி!', english: "That's the one." },
-  { tamil: 'அழகா எழுதினே.', english: 'Beautifully spotted.' },
-  { tamil: 'ஆமா!', english: 'Yes, exactly.' },
-  { tamil: 'நல்லா பாத்தே.', english: 'Good eye.' },
-]
-const NUDGE = [
-  { tamil: 'கிட்டத்தட்ட.', english: 'Almost. Look at the shape again.' },
-  { tamil: 'பரவாயில்ல.', english: 'No worries. This one is tricky.' },
-  { tamil: 'நெருங்கிட்டே.', english: "You're getting there." },
-]
 
 type Item = { target: Letter; options: Letter[] }
 
@@ -55,7 +45,7 @@ export function WritingPractice({ onFinish }: Props) {
     setPicked(l.id)
     if (l.id === item.target.id) {
       markPractised('letters', l.id)
-      setFeedback(pickRandom(PRAISE))
+      setFeedback(pickRandom(NICE))
     } else {
       setFeedback(pickRandom(NUDGE))
     }
