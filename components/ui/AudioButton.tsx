@@ -4,11 +4,12 @@ import { useSpeech } from '@/hooks/useSpeech'
 interface Props {
   text: string
   onPlay?: () => void
-  size?: 'sm' | 'md' | 'lg'
-  variant?: 'vermillion' | 'navy' | 'ghost'
+  size?: 'xs' | 'sm' | 'md' | 'lg'
+  variant?: 'vermillion' | 'navy' | 'ghost' | 'light'
+  label?: string
 }
 
-export function AudioButton({ text, onPlay, size = 'md', variant = 'vermillion' }: Props) {
+export function AudioButton({ text, onPlay, size = 'md', variant = 'vermillion', label }: Props) {
   const { speak, isSpeaking, isAvailable } = useSpeech()
 
   const handlePlay = () => {
@@ -16,22 +17,27 @@ export function AudioButton({ text, onPlay, size = 'md', variant = 'vermillion' 
     onPlay?.()
   }
 
-  const sizes = { sm: '32px', md: '40px', lg: '48px' }
-  const iconSizes = { sm: 12, md: 14, lg: 18 }
+  const sizes = { xs: '26px', sm: '32px', md: '40px', lg: '48px' }
+  const iconSizes = { xs: 10, sm: 12, md: 14, lg: 18 }
 
   const colours = {
     vermillion: { bg: 'var(--vermillion)', color: '#fff', border: 'none' },
     navy:       { bg: 'var(--navy)',       color: '#fff', border: 'none' },
     ghost:      { bg: 'transparent',       color: 'var(--stone)', border: '1.5px solid var(--stone-light)' },
+    light:      { bg: 'rgba(255,255,255,0.14)', color: '#fff', border: 'none' },
   }
 
   const c = colours[variant]
 
   return (
     <button
-      onClick={handlePlay}
+      type="button"
+      onClick={e => {
+        e.stopPropagation()
+        handlePlay()
+      }}
       disabled={!isAvailable}
-      aria-label="Listen to Tamil pronunciation"
+      aria-label={label ?? "Listen to Tamil pronunciation"}
       title={!isAvailable ? 'Audio not available on this browser' : undefined}
       style={{
         width: sizes[size],

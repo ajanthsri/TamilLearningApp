@@ -69,7 +69,7 @@ function LearnContent() {
 
   return (
     <div style={{ minHeight: '100dvh', background: 'var(--cream)', paddingBottom: 'calc(90px + env(safe-area-inset-bottom))' }}>
-      <PageHeader tamil="கற்க" title="Learn" subtitle="Letters, words, and phrases. Start anywhere." watermark="அ" />
+      <PageHeader tamil="கற்க" roman="karka" title="Learn" subtitle="Browse everything. Tap play on anything Tamil." watermark="அ" />
 
       {/* Tabs */}
       <div

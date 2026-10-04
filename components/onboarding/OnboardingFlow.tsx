@@ -9,8 +9,13 @@ import { useLearnerStage } from '@/hooks/useLearnerStage'
 import { AudioButton } from '@/components/ui/AudioButton'
 import { QuizQuestion } from '@/components/challenge/QuizQuestion'
 import { StageCard } from './StageCard'
+import { Avatar } from '@/components/ui/Avatar'
+import { BackButton } from '@/components/ui/PageHeader'
+import { characters } from '@/data/avatars'
+import { useProfile } from '@/hooks/useProfile'
+import { SHOW_STAGE_SELECTION } from '@/lib/config'
 
-type Screen = 'welcome' | 'stage' | 'check' | 'result'
+type Screen = 'welcome' | 'dialect' | 'avatar' | 'stage' | 'check' | 'result'
 const NO_IDS: number[] = []
 const ADVANCE_MS = 900
 
@@ -28,6 +33,7 @@ export function OnboardingFlow({ onComplete }: Props) {
   const quiz = useQuiz(NO_IDS, NO_IDS)
   const { markSeen } = useProgress()
   const { setStage, completeOnboarding } = useLearnerStage()
+  const { character, hasAvatar, setAvatar, setDialect } = useProfile()
 
   useEffect(() => () => clearTimeout(timer.current), [])
 
@@ -35,6 +41,12 @@ export function OnboardingFlow({ onComplete }: Props) {
     setStage(stage)
     completeOnboarding()
     onComplete?.(stage)
+  }
+
+  const continueFromAvatar = () => {
+    if (!hasAvatar) setAvatar(character.id)
+    if (SHOW_STAGE_SELECTION) setScreen('stage')
+    else finish('newbie')
   }
 
   const continueFromStage = () => {
@@ -96,27 +108,133 @@ export function OnboardingFlow({ onComplete }: Props) {
         {screen === 'welcome' && (
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 'calc(100dvh - 56px)' }}>
             <Kicker>Learn Tamil</Kicker>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: '8px 0 10px' }}>
-              <h1 lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 52, color: 'var(--turmeric)', lineHeight: 1.15, fontWeight: 400 }}>
-                வணக்கம்
-              </h1>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 56, letterSpacing: 1.5, lineHeight: 1, margin: '8px 0 18px', fontWeight: 400 }}>
+              Welcome.
+            </h1>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 14,
+                background: 'rgba(255,255,255,0.06)',
+                borderRadius: 'var(--radius-lg)',
+                padding: '14px 16px',
+                maxWidth: 340,
+              }}
+            >
               <AudioButton text="வணக்கம்" size="lg" />
+              <div>
+                <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 28, color: 'var(--turmeric)', lineHeight: 1.2 }}>
+                  வணக்கம்
+                </div>
+                <div style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'rgba(255,255,255,0.7)' }}>
+                  <em>vanakkam</em> means hello. Tap play to hear it.
+                </div>
+              </div>
             </div>
-            <p style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 17, color: 'rgba(255,255,255,0.75)', lineHeight: 1.5, maxWidth: 320 }}>
-              Learning Tamil, the way it was always meant to be shared.
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'rgba(255,255,255,0.75)', lineHeight: 1.5, maxWidth: 330, marginTop: 20 }}>
+              Learn Tamil the way your family speaks it. A few words at a time, with a play button on everything.
             </p>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'rgba(255,255,255,0.45)', marginTop: 12 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'rgba(255,255,255,0.45)', marginTop: 10 }}>
               No sign-up. No streaks. Just Tamil.
             </p>
-            <div style={{ marginTop: 36 }}>
-              <Primary onClick={() => setScreen('stage')}>Begin →</Primary>
+            <div style={{ marginTop: 32 }}>
+              <Primary onClick={() => setScreen('dialect')}>Let&apos;s begin →</Primary>
             </div>
           </div>
         )}
 
+        {screen === 'dialect' && (
+          <>
+            <BackButton label="Back" onClick={() => setScreen('welcome')} />
+            <StepDots step={1} />
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 36, letterSpacing: 1, lineHeight: 1.05, marginTop: 14, fontWeight: 400 }}>
+              Which Tamil do you want to learn?
+            </h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: 'rgba(255,255,255,0.65)', margin: '8px 0 20px', lineHeight: 1.45 }}>
+              The script is the same, but everyday words and accents differ. We teach one properly rather than mixing them.
+            </p>
+            <div role="radiogroup" aria-label="Dialect" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <ChoiceCard selected title="Sri Lankan Tamil" tamil="இலங்கைத் தமிழ்" body="As spoken in Jaffna, Colombo and most of the UK diaspora. Ammamma, koppi, and ஓம் for yes." onClick={() => setDialect('lk')} />
+              <ChoiceCard disabled title="Indian Tamil" tamil="இந்தியத் தமிழ்" body="As spoken in Tamil Nadu. Coming soon." badge="Coming soon" />
+            </div>
+            <div style={{ marginTop: 24 }}>
+              <Primary
+                onClick={() => {
+                  setDialect('lk')
+                  setScreen('avatar')
+                }}
+              >
+                Continue →
+              </Primary>
+            </div>
+          </>
+        )}
+
+        {screen === 'avatar' && (
+          <>
+            <BackButton label="Back" onClick={() => setScreen('dialect')} />
+            <StepDots step={2} />
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 36, letterSpacing: 1, lineHeight: 1.05, marginTop: 14, fontWeight: 400 }}>
+              Pick your character
+            </h2>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: 'rgba(255,255,255,0.65)', margin: '8px 0 18px', lineHeight: 1.45 }}>
+              They start as a child and grow up as you learn.
+            </p>
+            <div role="radiogroup" aria-label="Character" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10 }}>
+              {characters.map((c, i) => {
+                const selected = hasAvatar && character.id === c.id
+                return (
+                  <button
+                    key={c.id}
+                    role="radio"
+                    aria-checked={selected}
+                    onClick={() => setAvatar(c.id)}
+                    className="tappable"
+                    style={{
+                      background: selected ? 'rgba(245,166,35,0.12)' : 'rgba(255,255,255,0.04)',
+                      border: selected ? '2px solid var(--turmeric)' : '2px solid rgba(255,255,255,0.1)',
+                      borderRadius: 'var(--radius-lg)',
+                      padding: '10px 4px 8px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 4,
+                      color: '#fff',
+                      animation: `stampIn 180ms ${i * 50}ms ease-out backwards`,
+                    }}
+                  >
+                    <Avatar character={c} level={1} size={72} />
+                    <span style={{ fontFamily: 'var(--font-display)', fontSize: 18, letterSpacing: 1 }}>{c.name}</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 12, color: 'rgba(255,255,255,0.55)' }}>{c.meaning}</span>
+                  </button>
+                )
+              })}
+            </div>
+            {hasAvatar && (
+              <div style={{ marginTop: 18, animation: 'pageFade 200ms ease-out both' }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: 13, letterSpacing: 2, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', marginBottom: 8 }}>
+                  {character.name} as you level up
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {[1, 2, 3, 4, 5].map(l => (
+                    <Avatar key={l} character={character} level={l} size={l === 1 ? 44 : 52} />
+                  ))}
+                </div>
+              </div>
+            )}
+            <div style={{ marginTop: 24 }}>
+              <Primary onClick={continueFromAvatar} disabled={!hasAvatar}>
+                Start learning →
+              </Primary>
+            </div>
+          </>
+        )}
+
         {screen === 'stage' && (
           <>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <BackButton label="Back" onClick={() => setScreen('avatar')} />
               <TextButton onClick={() => finish('newbie')}>Skip</TextButton>
             </div>
             <h2 lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 24, lineHeight: 1.4, color: 'var(--turmeric)', fontWeight: 400, marginTop: 8 }}>
@@ -294,6 +412,66 @@ function TextButton({ onClick, children }: { onClick: () => void; children: Reac
       style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', fontFamily: 'var(--font-display)', fontSize: 16, letterSpacing: 1.5, padding: 8 }}
     >
       {children}
+    </button>
+  )
+}
+
+function StepDots({ step }: { step: number }) {
+  return (
+    <div style={{ display: 'flex', gap: 6, marginTop: 18 }} aria-label={`Step ${step} of 2`}>
+      {[1, 2].map(i => (
+        <div key={i} style={{ width: 28, height: 4, borderRadius: 2, background: i <= step ? 'var(--turmeric)' : 'rgba(255,255,255,0.15)' }} />
+      ))}
+    </div>
+  )
+}
+
+function ChoiceCard({
+  title,
+  tamil,
+  body,
+  badge,
+  selected,
+  disabled,
+  onClick,
+}: {
+  title: string
+  tamil: string
+  body: string
+  badge?: string
+  selected?: boolean
+  disabled?: boolean
+  onClick?: () => void
+}) {
+  return (
+    <button
+      role="radio"
+      aria-checked={!!selected}
+      aria-disabled={disabled}
+      disabled={disabled}
+      onClick={onClick}
+      className={disabled ? undefined : 'tappable'}
+      style={{
+        textAlign: 'left',
+        background: selected ? 'rgba(245,166,35,0.1)' : 'rgba(255,255,255,0.04)',
+        border: selected ? '2px solid var(--turmeric)' : '2px solid rgba(255,255,255,0.12)',
+        borderRadius: 'var(--radius-lg)',
+        padding: '16px 18px',
+        color: '#fff',
+        opacity: disabled ? 0.5 : 1,
+        cursor: disabled ? 'default' : 'pointer',
+      }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+        <span style={{ fontFamily: 'var(--font-display)', fontSize: 24, letterSpacing: 1, color: selected ? 'var(--turmeric)' : '#fff' }}>{title}</span>
+        {badge ? (
+          <span style={{ fontFamily: 'var(--font-display)', fontSize: 12, letterSpacing: 1.2, border: '1px solid rgba(255,255,255,0.4)', borderRadius: 10, padding: '2px 8px' }}>{badge}</span>
+        ) : (
+          selected && <span aria-hidden style={{ color: 'var(--turmeric)', fontSize: 20 }}>✓</span>
+        )}
+      </div>
+      <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 15, color: 'rgba(255,255,255,0.6)', marginTop: 2 }}>{tamil}</div>
+      <div style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'rgba(255,255,255,0.7)', marginTop: 6, lineHeight: 1.4 }}>{body}</div>
     </button>
   )
 }

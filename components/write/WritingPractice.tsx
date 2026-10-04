@@ -7,6 +7,7 @@ import { useProgress } from '@/hooks/useProgress'
 import { useXP } from '@/hooks/useXP'
 import { pickRandom, shuffle } from '@/lib/store'
 import { NICE, NUDGE } from '@/data/copy'
+import { Say } from '@/components/ui/Say'
 
 // First five vowels: அ ஆ இ ஈ உ
 const TARGET_IDS = [1, 2, 3, 4, 5]
@@ -149,9 +150,7 @@ export function WritingPractice({ onFinish }: Props) {
           }}
         >
           <div>
-            <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 18, color: 'var(--navy)' }}>
-              {feedback.tamil}
-            </div>
+            <Say tamil={feedback.tamil} size={18} colour="var(--navy)" />
             <div style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--stone)' }}>
               {feedback.english} {!correct && <>It&apos;s <span lang="ta" style={{ fontFamily: 'var(--font-tamil)' }}>{item.target.tamil}</span>.</>}
             </div>

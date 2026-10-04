@@ -1,6 +1,87 @@
 # தமிழ் — Tamil Learning App
 ## Build-Ready PRD · POC Version
-### Last updated: October 2026 · Ready to build · Adds onboarding + learner stage
+### Last updated: 4 October 2026 · Newbie focus, Sri Lankan Tamil first
+
+---
+
+## Newbie Focus Update (4 October 2026)
+
+**This section overrides anything below that conflicts with it.** After the first build, the POC narrows to Newbies learning **Sri Lankan Tamil**. Everything else stays in the code, switched off or as a "coming soon".
+
+### Decisions
+| Decision | What it means in the app |
+|---|---|
+| Newbies only for now | `SHOW_STAGE_SELECTION = false` in `lib/config.ts`. Everyone starts as Newbie. Stage picker, placement check and the stage control on Stats are hidden, not deleted. |
+| Sri Lankan Tamil first | All content and UI Tamil uses Sri Lankan forms. Indian Tamil appears in onboarding and settings as "Coming soon". |
+| English first for Newbies | Every screen leads with English. Tamil is the accent, and always has a play button beside it. |
+| Real voices over the phone voice | Recordings play first. The phone's Tamil voice (ta-LK, then ta-IN) is only a fallback. |
+| No personal data collection in the POC | No age, gender or location asked. Use a post-test survey (Google Form or Tally) instead. Revisit with a backend, privacy notice and consent if needed later. |
+| Avatar chosen, not generated | Pick one of 6 characters. It ages with XP level, so no personal data is needed. |
+| Real film dialogue | Not in the app. Original lines stay. Any real lines need an IP solicitor's review before public launch. |
+
+### Onboarding (replaces the flow in "Onboarding & Learner Stage")
+1. **Welcome.** English headline, வணக்கம் with play button and meaning.
+2. **Which Tamil?** Sri Lankan Tamil (selected) or Indian Tamil (coming soon, disabled).
+3. **Pick your character.** 6 characters, with a strip showing how the chosen one grows from Level 1 to 5.
+4. Straight to Home. Back buttons on steps 2 and 3.
+
+### Packs: the Newbie learning path
+Six short packs in order, built from `words.ts` categories (`data/packs.ts`):
+
+| # | Pack | Words |
+|---|---|---|
+| 1 | Greetings வணக்கம் | 5 |
+| 2 | Family குடும்பம் | 7 (adds அம்மம்மா) |
+| 3 | Food சாப்பாடு | 6 |
+| 4 | Feelings உணர்வுகள் | 5 |
+| 5 | Nature இயற்கை | 5 |
+| 6 | Time நேரம் | 3 |
+
+**Route:** `/pack/[id]`, statically generated. Close button (top left) goes home at any point; XP and seen items are kept.
+
+**Flow:** intro (name, blurb, word count) → one word per screen (Tamil large, romanisation, "Hear it", tap to reveal meaning, Next enabled after reveal; next word auto-plays) → 3-question check on that pack's words (VictoryOverlay on correct, warm inline nudge on wrong) → pack complete (confetti, drum fanfare, the words learned with play buttons, +40 XP once per pack, "Next: Family →").
+
+**Completion rule:** finishing the pack completes it, whatever the check score. No punishment.
+
+**Storage:** `tamil-packs-complete` (array of pack ids). Hook: `usePacks()` → `{ packs, done, complete, isComplete, nextPack, completedCount }`.
+
+**XP:** new action `pack_completed: 40`, awarded once per pack via `addXPOnce`.
+
+### Home (replaces "Page Specs → /")
+1. **Hero:** avatar (taps through to Stats), "Welcome / Welcome back", வணக்கம் with play, level name in English with Tamil and play, XP total, bar with "N XP until {character} grows up to {next level}", three stat tiles (words heard, practised, packs done).
+2. **Continue card:** next unfinished pack, big and vermillion. When all six are done it points to Challenge.
+3. **Your path:** 6 pack tiles (done, current, upcoming). Any pack can be replayed.
+4. **Cinema line of the day.**
+5. **More to explore:** Learn, Challenge, Write as English-first rows.
+
+### Navigation
+- Every module page header has a **← Home** button. The PageHeader leads with the English title, then Tamil with a play button.
+- Packs have a **close (×)** button.
+- Bottom nav is English first with small Tamil underneath. "Progress" is renamed **Stats** (நிலை).
+
+### Stats page (was Progress)
+Character card (change character, growth strip LV1–5), XP bar, packs progress, seen/practised per module, settings (dialect shown, drum sounds on/off), reset. Reset clears XP, progress, packs, character, dialect and onboarding.
+
+### Avatar
+`data/avatars.ts`: Nila, Kavi, Malar, Arivu, Thendral, Veera. `components/ui/Avatar.tsx` draws them in SVG. Level 1 child · 2 school collar and book · 3 shoulder scarf · 4 speech bubble · 5 grey hair, glasses, jasmine garland. Frame goes bronze → silver → gold. Stored in `tamil-avatar`.
+
+### Sound
+- **Recordings:** `npm run audio:list` writes `audio/recording-list-lk.csv` (119 lines: words, phrases, dialogues, letters, examples, packs, levels and UI lines). Record each one, save it in `public/audio/lk/` under its filename (.mp3, .m4a or .wav). The build runs `scripts/audio-manifest.ts`, which matches files back to their Tamil text, so every play button showing that text uses the recording.
+- **Drum hits:** synthesised in the browser (`lib/sfx.ts`), so there are no files to license. "ta-DHUM" on a correct answer, a short fanfare on pack complete. Can be switched off on Stats (`tamil-sfx`).
+
+### Sri Lankan Tamil content changes (need native review)
+- Words: ஓம் (yes), இடியப்பம் (string hoppers), கோப்பி (coffee), அம்மம்மா (grandmother, new), notes on அண்ணா and இண்டைக்கு.
+- Phrases rewritten in spoken Sri Lankan Tamil (விளங்கேல்லை, கதையுங்கோ, சுகமா இருக்கிறீங்களா?, இன்னொருக்கா, வேணும்).
+- UI lines moved to `data/copy.ts` and switched to ‑ீங்க / ‑ுங்கோ forms. "Paati would be proud" is now "Ammamma would be proud".
+
+### New localStorage keys
+`tamil-packs-complete`, `tamil-avatar`, `tamil-dialect`, `tamil-sfx`.
+
+### Next steps
+1. AJ reviews all Tamil in `data/words.ts`, `data/phrases.ts`, `data/copy.ts` and `data/packs.ts`.
+2. Record the Sri Lankan Tamil set from `audio/recording-list-lk.csv`.
+3. Test with 5 Sri Lankan Tamil newbies; post-test survey for age, location and feedback.
+4. Then: Indian Tamil content and voices, and word-by-word breakdown of the cinema line for Newbies.
 
 ---
 

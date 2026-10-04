@@ -14,6 +14,12 @@ import { words } from '@/data/words'
 import { phrases } from '@/data/phrases'
 import { dialogues } from '@/data/dialogues'
 import { ModuleKey } from '@/types'
+import { Avatar } from '@/components/ui/Avatar'
+import { characters } from '@/data/avatars'
+import { useProfile } from '@/hooks/useProfile'
+import { useXP } from '@/hooks/useXP'
+import { PACKS_KEY, usePacks } from '@/hooks/usePacks'
+import { SHOW_STAGE_SELECTION } from '@/lib/config'
 
 const MODULES: { key: ModuleKey; tamil: string; label: string; total: number }[] = [
   { key: 'letters', tamil: 'எழுத்து', label: 'Letters', total: letters.length },
@@ -27,6 +33,10 @@ export default function ProgressPage() {
   const hydrated = useHydrated()
   const { countSeen, countPractised } = useProgress()
   const { stage, setStage, resetOnboarding } = useLearnerStage()
+  const { character, setAvatar, sfx, setSfx, resetProfile } = useProfile()
+  const { currentLevel } = useXP()
+  const { packs, isComplete, completedCount } = usePacks()
+  const [picking, setPicking] = useState(false)
   const [confirming, setConfirming] = useState(false)
   const cancelRef = useRef<HTMLButtonElement>(null)
 
@@ -38,6 +48,8 @@ export default function ProgressPage() {
     removeStore(PROGRESS_KEY)
     removeStore(XP_KEY)
     removeStore(AWARDED_KEY)
+    removeStore(PACKS_KEY)
+    resetProfile()
     resetOnboarding()
     setConfirming(false)
     router.push('/')
@@ -45,13 +57,86 @@ export default function ProgressPage() {
 
   return (
     <div style={{ minHeight: '100dvh', background: 'var(--cream)', paddingBottom: 'calc(90px + env(safe-area-inset-bottom))' }}>
-      <PageHeader tamil="முன்னேற்றம்" title="Progress" subtitle="Your journey so far." watermark="↑" />
+      <PageHeader tamil="முன்னேற்றம்" roman="munnetram" title="Your stats" subtitle="Everything you have explored, and your settings." watermark="↑" />
 
       <main className="page-enter" style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 22 }}>
-        {hydrated && <XPBar variant="dark" />}
+        {/* Character */}
+        {hydrated && (
+          <section aria-labelledby="char-heading" style={{ background: 'var(--navy)', borderRadius: 'var(--radius-lg)', padding: 16, color: '#fff' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <Avatar character={character} level={currentLevel.level} size={92} />
+              <div style={{ minWidth: 0 }}>
+                <h2 id="char-heading" style={{ fontFamily: 'var(--font-display)', fontSize: 30, letterSpacing: 1, lineHeight: 1, fontWeight: 400 }}>
+                  {character.name}
+                </h2>
+                <div style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>
+                  means {character.meaning}
+                </div>
+                <button
+                  onClick={() => setPicking(p => !p)}
+                  className="tappable"
+                  style={{ marginTop: 8, background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', borderRadius: 16, padding: '6px 14px', fontFamily: 'var(--font-display)', fontSize: 15, letterSpacing: 1 }}
+                >
+                  {picking ? 'Done' : 'Change character'}
+                </button>
+              </div>
+            </div>
+            {picking && (
+              <div role="radiogroup" aria-label="Character" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 8, marginTop: 14 }}>
+                {characters.map(c => (
+                  <button
+                    key={c.id}
+                    role="radio"
+                    aria-checked={c.id === character.id}
+                    onClick={() => setAvatar(c.id)}
+                    className="tappable"
+                    style={{
+                      background: 'rgba(255,255,255,0.04)',
+                      border: c.id === character.id ? '2px solid var(--turmeric)' : '2px solid rgba(255,255,255,0.1)',
+                      borderRadius: 'var(--radius)',
+                      padding: '8px 2px 6px',
+                      color: '#fff',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: 2,
+                    }}
+                  >
+                    <Avatar character={c} level={currentLevel.level} size={56} />
+                    <span style={{ fontFamily: 'var(--font-display)', fontSize: 15, letterSpacing: 1 }}>{c.name}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 14 }} aria-label="How your character grows">
+              {[1, 2, 3, 4, 5].map(l => (
+                <div key={l} style={{ opacity: l <= currentLevel.level ? 1 : 0.35, textAlign: 'center', flex: 1 }}>
+                  <Avatar character={character} level={l} size={48} />
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 11, letterSpacing: 1, color: 'rgba(255,255,255,0.6)' }}>LV {l}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {hydrated && <XPBar variant="light" />}
+
+        {/* Packs */}
+        <section aria-labelledby="packs-heading">
+          <SectionTitle id="packs-heading" tamil="பாடங்கள்" label={`Packs · ${hydrated ? completedCount : 0} of ${packs.length} done`} />
+          <div style={{ display: 'flex', gap: 6 }}>
+            {packs.map(p => (
+              <div
+                key={p.id}
+                title={p.english}
+                style={{ flex: 1, height: 10, borderRadius: 5, background: hydrated && isComplete(p.id) ? 'var(--vermillion)' : 'var(--cream-dark)' }}
+              />
+            ))}
+          </div>
+        </section>
 
         {/* Stage */}
-        <section aria-labelledby="stage-heading">
+        {SHOW_STAGE_SELECTION && <section aria-labelledby="stage-heading">
           <SectionTitle id="stage-heading" tamil="நிலை" label="Your stage" />
           <div
             role="radiogroup"
@@ -100,7 +185,7 @@ export default function ProgressPage() {
           <p style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 13, color: 'var(--stone)', marginTop: 8 }}>
             This only changes where we suggest you start. Everything stays open.
           </p>
-        </section>
+        </section>}
 
         {/* Stats */}
         <section aria-labelledby="stats-heading">
@@ -130,6 +215,27 @@ export default function ProgressPage() {
                 </div>
               )
             })}
+          </div>
+        </section>
+
+        {/* Settings */}
+        <section aria-labelledby="settings-heading">
+          <SectionTitle id="settings-heading" tamil="அமைப்புகள்" label="Settings" />
+          <div style={{ background: 'var(--white)', border: '1.5px solid var(--cream-dark)', borderRadius: 'var(--radius-lg)' }}>
+            <SettingRow label="Tamil you're learning" value="Sri Lankan Tamil" note="Indian Tamil coming soon" />
+            <div style={{ height: 1, background: 'var(--cream-dark)' }} />
+            <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', gap: 12, cursor: 'pointer' }}>
+              <span>
+                <span style={{ display: 'block', fontFamily: 'var(--font-display)', fontSize: 18, letterSpacing: 1, color: 'var(--navy)' }}>Drum sounds</span>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--stone)' }}>Play a drum hit when you get one right</span>
+              </span>
+              <input
+                type="checkbox"
+                checked={hydrated ? sfx : true}
+                onChange={e => setSfx(e.target.checked)}
+                style={{ width: 22, height: 22, accentColor: 'var(--vermillion)' }}
+              />
+            </label>
           </div>
         </section>
 
@@ -178,7 +284,7 @@ export default function ProgressPage() {
               Start fresh?
             </h2>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: 'var(--stone)', margin: '6px 0 20px', lineHeight: 1.45 }}>
-              This clears all your progress, seen items and your stage.
+              This clears your XP, packs, everything you have seen, and your character.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <button
@@ -247,6 +353,18 @@ function Stat({ label, value, total, colour }: { label: string; value: number; t
       <div style={{ height: 4, background: 'var(--cream-dark)', borderRadius: 2, overflow: 'hidden' }}>
         <div style={{ width: `${(value / total) * 100}%`, height: '100%', background: colour, transition: 'width 600ms ease-out' }} />
       </div>
+    </div>
+  )
+}
+
+function SettingRow({ label, value, note }: { label: string; value: string; note?: string }) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 16px', gap: 12 }}>
+      <span>
+        <span style={{ display: 'block', fontFamily: 'var(--font-display)', fontSize: 18, letterSpacing: 1, color: 'var(--navy)' }}>{label}</span>
+        {note && <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--stone)' }}>{note}</span>}
+      </span>
+      <span style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 14, color: 'var(--navy)', textAlign: 'right' }}>{value}</span>
     </div>
   )
 }

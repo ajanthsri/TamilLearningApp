@@ -5,6 +5,8 @@ import { PageHeader } from '@/components/ui/PageHeader'
 import { NavBar } from '@/components/ui/NavBar'
 import { WritingPractice } from '@/components/write/WritingPractice'
 import { VictoryOverlay } from '@/components/ui/VictoryOverlay'
+import { Say } from '@/components/ui/Say'
+import { AudioButton } from '@/components/ui/AudioButton'
 
 type Phase = 'intro' | 'practice' | 'done'
 
@@ -29,16 +31,28 @@ export default function WritePage() {
 
   return (
     <div style={{ minHeight: '100dvh', background: 'var(--cream)', paddingBottom: 'calc(90px + env(safe-area-inset-bottom))' }}>
-      <PageHeader tamil="எழுது" title="Write" subtitle="Recognise the shape. Feel the language." watermark="எ" />
+      <PageHeader tamil="எழுது" roman="ezhuthu" title="Write" subtitle="Recognise the shape. Feel the language." watermark="எ" />
 
       <main style={{ padding: '22px 16px' }}>
         {phase === 'intro' && (
           <div className="page-enter" style={{ textAlign: 'center', padding: '20px 8px' }}>
-            <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 56, color: 'var(--navy)', letterSpacing: 8, marginBottom: 8 }}>
-              அ ஆ இ ஈ உ
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: 8, marginBottom: 16 }}>
+              {[
+                ['அ', 'a'],
+                ['ஆ', 'aa'],
+                ['இ', 'i'],
+                ['ஈ', 'ii'],
+                ['உ', 'u'],
+              ].map(([t, r]) => (
+                <div key={t} style={{ background: 'var(--navy)', borderRadius: 'var(--radius)', padding: '10px 4px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                  <span lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 34, color: '#fff', lineHeight: 1.1 }}>{t}</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 13, color: 'var(--turmeric)' }}>{r}</span>
+                  <AudioButton text={t} size="xs" variant="light" />
+                </div>
+              ))}
             </div>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'var(--navy)', lineHeight: 1.5, marginBottom: 6 }}>
-              The first five vowels. We&apos;ll say a sound, you pick its shape.
+              The first five vowels. Tap each one to hear it. Then we&apos;ll give you a sound and you pick its shape.
             </p>
             <p style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 14, color: 'var(--stone)', marginBottom: 24 }}>
               Look closely. Some of them are twins with a small tail.
@@ -62,9 +76,7 @@ export default function WritePage() {
 
         {phase === 'done' && (
           <div className="page-enter" style={{ textAlign: 'center', padding: '24px 8px' }}>
-            <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 30, color: 'var(--navy)' }}>
-              நல்லாச் செய்தீங்க.
-            </div>
+            <Say tamil="நல்லாச் செய்தீங்க." size={30} colour="var(--navy)" buttonSize="sm" />
             <p style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 15, color: 'var(--stone)', margin: '4px 0 16px' }}>
               You did it. Five shapes closer to reading Tamil.
             </p>

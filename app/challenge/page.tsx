@@ -12,6 +12,7 @@ import { useLearnerStage } from '@/hooks/useLearnerStage'
 import { pickRandom } from '@/lib/store'
 import { XP_VALUES } from '@/types'
 import { ENCOURAGE, RESULT } from '@/data/copy'
+import { Say } from '@/components/ui/Say'
 
 
 function resultCopy(score: number) {
@@ -105,7 +106,7 @@ export default function ChallengePage() {
 
   return (
     <div style={{ minHeight: '100dvh', background: 'var(--cream)', paddingBottom: 'calc(90px + env(safe-area-inset-bottom))' }}>
-      <PageHeader tamil="தேர்வு" title="Challenge" subtitle="Let's see what's stayed with you." watermark="?" />
+      <PageHeader tamil="தேர்வு" roman="thervu" title="Challenge" subtitle="Let's see what's stayed with you." watermark="?" />
 
       <main style={{ padding: '20px 16px' }}>
         {!started && (
@@ -153,9 +154,7 @@ export default function ChallengePage() {
                   animation: 'pageFade 160ms ease-out both',
                 }}
               >
-                <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 18, color: 'var(--navy)' }}>
-                  {encourage.tamil}
-                </div>
+                <Say tamil={encourage.tamil} size={18} colour="var(--navy)" />
                 <div style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--stone)' }}>{encourage.english}</div>
               </div>
             )}
@@ -173,8 +172,8 @@ export default function ChallengePage() {
             <div style={{ fontFamily: 'var(--font-display)', fontSize: 72, lineHeight: 1, color: 'var(--vermillion)', letterSpacing: 2 }}>
               {quiz.score}/{quiz.questions.length}
             </div>
-            <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 26, color: 'var(--navy)', marginTop: 10 }}>
-              {result.tamil}
+            <div style={{ marginTop: 10 }}>
+              <Say tamil={result.tamil} size={26} colour="var(--navy)" buttonSize="sm" />
             </div>
             <p style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 15, color: 'var(--stone)', marginTop: 4, marginBottom: 18 }}>
               {result.english}

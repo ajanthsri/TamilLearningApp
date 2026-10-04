@@ -71,6 +71,7 @@ export type XPAction =
   | 'quiz_completed'
   | 'writing_completed'
   | 'return_visit'
+  | 'pack_completed'
 
 export const XP_VALUES: Record<XPAction, number> = {
   card_heard: 5,
@@ -79,6 +80,7 @@ export const XP_VALUES: Record<XPAction, number> = {
   quiz_completed: 50,
   writing_completed: 15,
   return_visit: 30,
+  pack_completed: 40,
 }
 
 export type XPState = {

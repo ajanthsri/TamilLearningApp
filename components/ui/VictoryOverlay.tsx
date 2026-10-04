@@ -2,6 +2,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { pickRandom } from '@/lib/store'
 import { PRAISE } from '@/data/copy'
+import { playCorrect } from '@/lib/sfx'
+import { AudioButton } from './AudioButton'
 
 
 const FLASH_MS = 280
@@ -32,6 +34,7 @@ export function VictoryOverlay({ visible, tamil, xpGained, isLevelUp, levelName,
   useEffect(() => {
     if (!visible) return
     setPraise(pickRandom(PRAISE))
+    playCorrect()
     setPhase('flash')
     const timers = [
       setTimeout(() => setPhase('reveal'), FLASH_MS),
@@ -97,6 +100,7 @@ export function VictoryOverlay({ visible, tamil, xpGained, isLevelUp, levelName,
 
           <div style={{ width: 48, height: 2, background: 'var(--vermillion)', marginBottom: 28 }} />
 
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, position: 'relative', marginBottom: 16 }}>
           <div
             lang="ta"
             style={{
@@ -105,11 +109,11 @@ export function VictoryOverlay({ visible, tamil, xpGained, isLevelUp, levelName,
               color: 'var(--turmeric)',
               textAlign: 'center',
               lineHeight: 1.2,
-              marginBottom: 16,
-              position: 'relative',
             }}
           >
             {tamil}
+          </div>
+          <AudioButton text={tamil} size="md" variant="light" />
           </div>
 
           <div style={{ textAlign: 'center', marginBottom: 28, position: 'relative' }}>
