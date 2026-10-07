@@ -55,7 +55,7 @@ export function AudioButton({ text, onPlay, size = 'md', variant = 'vermillion',
         animation: isSpeaking ? 'audioPulse 600ms ease-out' : 'none',
         transition: 'transform 80ms ease-out, opacity 200ms',
       }}
-      className="tappable"
+      className="tappable hit-44"
     >
       <svg width={iconSizes[size]} height={iconSizes[size]} viewBox="0 0 24 24" fill="currentColor">
         <polygon points="5,3 19,12 5,21" />

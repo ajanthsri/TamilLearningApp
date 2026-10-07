@@ -67,7 +67,7 @@ export function NavBar() {
                 fontFamily: 'var(--font-tamil)',
                 fontSize: 11,
                 whiteSpace: 'nowrap',
-                color: active ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.4)',
+                color: active ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.6)',
                 lineHeight: 1.2,
               }}
             >

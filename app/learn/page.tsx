@@ -146,7 +146,7 @@ function LearnContent() {
                   fontSize: 13,
                   letterSpacing: 1,
                   textTransform: 'uppercase',
-                  color: active ? 'var(--vermillion)' : 'var(--stone-light)',
+                  color: active ? 'var(--vermillion)' : 'var(--stone)',
                 }}
               >
                 {t.label}

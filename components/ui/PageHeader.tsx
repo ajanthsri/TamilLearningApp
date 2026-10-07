@@ -69,7 +69,7 @@ export function BackButton({ label, onClick, dark = true }: { label: string; onC
   return (
     <button
       onClick={onClick}
-      className="tappable"
+      className="tappable hit-44"
       aria-label={label === 'Back' ? 'Back' : `Back to ${label}`}
       style={{
         display: 'inline-flex',
@@ -103,8 +103,8 @@ export function CloseButton({ onClick, label = 'Close', dark = true }: { onClick
       className="tappable"
       aria-label={label}
       style={{
-        width: 40,
-        height: 40,
+        width: 44,
+        height: 44,
         borderRadius: '50%',
         border: 'none',
         background: dark ? 'rgba(255,255,255,0.1)' : 'var(--cream-dark)',

@@ -166,7 +166,7 @@ export function VictoryOverlay({ visible, tamil, xpGained, isLevelUp, levelName,
             </div>
           )}
 
-          <div style={{ position: 'absolute', bottom: 'calc(24px + env(safe-area-inset-bottom))', fontSize: 11, color: 'rgba(255,255,255,0.3)', letterSpacing: 1 }}>
+          <div style={{ position: 'absolute', bottom: 'calc(24px + env(safe-area-inset-bottom))', fontSize: 12, color: 'rgba(255,255,255,0.6)', letterSpacing: 1 }}>
             tap to continue
           </div>
         </div>

@@ -144,7 +144,7 @@ export function OnboardingFlow({ onComplete }: Props) {
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'rgba(255,255,255,0.75)', lineHeight: 1.5, maxWidth: 330, marginTop: 20 }}>
               Learn Tamil the way your family speaks it. A few words at a time, with a play button on everything.
             </p>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'rgba(255,255,255,0.45)', marginTop: 10 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'rgba(255,255,255,0.6)', marginTop: 10 }}>
               No sign-up. No streaks. Just Tamil.
             </p>
             <div style={{ marginTop: 32 }}>
@@ -285,7 +285,7 @@ export function OnboardingFlow({ onComplete }: Props) {
                 Continue →
               </Primary>
             </div>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(255,255,255,0.45)', marginTop: 14 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 14 }}>
               You can change this anytime. Nothing is locked.
             </p>
           </>

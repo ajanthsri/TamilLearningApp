@@ -68,7 +68,7 @@ export function WordTile({ word, seen, practised, index = 0, onHear, onReveal }:
           </div>
           <div style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 14, color: 'var(--stone)', marginBottom: 8 }}>{word.roman}</div>
           <AudioButton text={word.tamil} onPlay={onHear} size="sm" />
-          <div style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: 'var(--stone-light)', marginTop: 6 }}>Tap to see meaning</div>
+          <div style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: 'var(--stone)', marginTop: 6 }}>Tap to see meaning</div>
         </div>
 
         {/* Back: meaning */}

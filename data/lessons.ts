@@ -40,7 +40,7 @@ export type TrackInfo = {
 
 export const TRACKS: Record<Track, TrackInfo> = {
   speak: { track: 'speak', english: 'Speak', tamil: 'பேசு', roman: 'pesu', colour: '#C1272D', ink: '#C1272D', tagline: 'Hear everyday words and say them back.' },
-  read: { track: 'read', english: 'Read', tamil: 'படி', roman: 'padi', colour: '#F5A623', ink: '#A86A00', tagline: 'Learn the letters, then read words without help.' },
+  read: { track: 'read', english: 'Read', tamil: 'படி', roman: 'padi', colour: '#F5A623', ink: '#8F5A00', tagline: 'Learn the letters, then read words without help.' },
   write: { track: 'write', english: 'Write', tamil: 'எழுது', roman: 'ezhuthu', colour: '#6FBF7A', ink: '#2D6A3F', tagline: 'Hear a sound and find its shape.' },
 }
 

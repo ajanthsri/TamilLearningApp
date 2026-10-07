@@ -13,7 +13,7 @@
   --navy-light: #252B4A;
   --cream: #FAF3E0;
   --cream-dark: #EDE5CC;
-  --stone: #8C7B6B;
+  --stone: #6F5F52;   /* darkened for 4.5:1 text contrast on cream */
   --stone-light: #B5A898;
   --white: #FDFAF4;
   --success: #2D6A3F;
@@ -163,6 +163,18 @@ button { font: inherit; }
 }
 @media (hover: hover) {
   .tappable:hover { filter: brightness(1.06); }
+}
+
+/* Small controls keep their look but get a 44px tap area (Apple's minimum) */
+.hit-44 { position: relative; }
+.hit-44::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
 }
 
 /* ── Chunky poster buttons: a solid bottom edge that presses down on tap ── */

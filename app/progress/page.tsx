@@ -289,7 +289,7 @@ export default function ProgressPage() {
         <div style={{ textAlign: 'center', paddingTop: 8 }}>
           <button
             onClick={() => setConfirming(true)}
-            style={{ background: 'none', border: 'none', color: 'var(--stone)', fontFamily: 'var(--font-body)', fontSize: 13, textDecoration: 'underline', padding: 8, cursor: 'pointer' }}
+            style={{ background: 'none', border: 'none', color: 'var(--stone)', fontFamily: 'var(--font-body)', fontSize: 13, textDecoration: 'underline', padding: 8, minHeight: 44, cursor: 'pointer' }}
           >
             Reset all progress
           </button>
