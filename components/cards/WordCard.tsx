@@ -25,7 +25,7 @@ export function WordCard({ word, seen, practised, index = 0, onHear, onReveal }:
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
         <div style={{ minWidth: 0 }}>
-          <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 28, color: 'var(--navy)', lineHeight: 1.3 }}>
+          <div lang="ta" style={{ fontFamily: 'var(--font-tamil-learn)', fontSize: 28, color: 'var(--navy)', lineHeight: 1.3 }}>
             {word.tamil}
           </div>
           <div style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 14, color: 'var(--stone)' }}>

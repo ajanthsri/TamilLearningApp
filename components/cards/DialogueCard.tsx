@@ -180,7 +180,7 @@ function WordChips({ words, accent }: { words: DialogueWord[]; accent: string })
                 transition: 'border-color 120ms ease-out, background 120ms ease-out',
               }}
             >
-              <span lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 18, color: '#fff', lineHeight: 1.3, overflowWrap: 'anywhere' }}>
+              <span lang="ta" style={{ fontFamily: 'var(--font-tamil-learn)', fontSize: 18, color: '#fff', lineHeight: 1.3, overflowWrap: 'anywhere' }}>
                 {w.tamil}
               </span>
               <span style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 12, color: 'var(--turmeric)' }}>{w.roman}</span>

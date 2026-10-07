@@ -258,7 +258,7 @@ export function LessonFlow({ lesson }: { lesson: Lesson }) {
                 borderTop: `5px solid ${lesson.colour}`,
               }}
             >
-              <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: card.kind === 'letter' ? 96 : card.tamil.length > 7 ? 46 : 60, color: '#fff', lineHeight: 1.2 }}>
+              <div lang="ta" style={{ fontFamily: 'var(--font-tamil-learn)', fontSize: card.kind === 'letter' ? 96 : card.tamil.length > 7 ? 46 : 60, color: '#fff', lineHeight: 1.2 }}>
                 {card.tamil}
               </div>
               {lesson.showRoman || revealed ? (
@@ -365,7 +365,7 @@ export function LessonFlow({ lesson }: { lesson: Lesson }) {
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 8, marginTop: 18 }}>
               {cards.map(c => (
                 <span key={c.id} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.07)', borderRadius: 20, padding: '4px 6px 4px 12px' }}>
-                  <span lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 15 }}>
+                  <span lang="ta" style={{ fontFamily: 'var(--font-tamil-learn)', fontSize: 15 }}>
                     {c.tamil}
                   </span>
                   <AudioButton text={c.tamil} size="xs" variant="light" />

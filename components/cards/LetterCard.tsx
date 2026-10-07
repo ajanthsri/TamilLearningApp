@@ -63,7 +63,7 @@ export function LetterCard({ letter, seen, practised, index = 0, onHear, onRevea
           <div style={{ position: 'absolute', top: 8, left: 8 }}>
             <StatusMark seen={seen} practised={practised} dark />
           </div>
-          <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 52, color: '#fff', lineHeight: 1.1 }}>
+          <div lang="ta" style={{ fontFamily: 'var(--font-tamil-learn)', fontSize: 52, color: '#fff', lineHeight: 1.1 }}>
             {letter.tamil}
           </div>
           <div style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 14, color: 'rgba(255,255,255,0.6)', marginBottom: 8 }}>
@@ -79,7 +79,7 @@ export function LetterCard({ letter, seen, practised, index = 0, onHear, onRevea
           className="flip-face flip-back"
           style={{ ...face, background: 'var(--white)', border: '2px solid var(--turmeric)', gap: 2 }}
         >
-          <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 26, color: 'var(--navy)', lineHeight: 1.3, textAlign: 'center' }}>
+          <div lang="ta" style={{ fontFamily: 'var(--font-tamil-learn)', fontSize: 26, color: 'var(--navy)', lineHeight: 1.3, textAlign: 'center' }}>
             {letter.example.tamil}
           </div>
           <div style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 13, color: 'var(--stone)' }}>

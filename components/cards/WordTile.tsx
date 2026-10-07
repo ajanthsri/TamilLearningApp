@@ -63,7 +63,7 @@ export function WordTile({ word, seen, practised, index = 0, onHear, onReveal }:
           <div style={{ position: 'absolute', top: 8, right: 8 }}>
             <StatusMark seen={seen} practised={practised} />
           </div>
-          <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: word.tamil.length > 7 ? 21 : 26, color: 'var(--navy)', lineHeight: 1.3, marginTop: 6 }}>
+          <div lang="ta" style={{ fontFamily: 'var(--font-tamil-learn)', fontSize: word.tamil.length > 7 ? 21 : 26, color: 'var(--navy)', lineHeight: 1.3, marginTop: 6 }}>
             {word.tamil}
           </div>
           <div style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 14, color: 'var(--stone)', marginBottom: 8 }}>{word.roman}</div>
@@ -74,7 +74,7 @@ export function WordTile({ word, seen, practised, index = 0, onHear, onReveal }:
         {/* Back: meaning */}
         <div className="flip-face flip-back" style={{ ...face, background: 'var(--navy)', border: `2px solid ${colour}` }}>
           <div style={{ fontFamily: 'var(--font-display)', fontSize: 24, letterSpacing: 1, color: 'var(--turmeric)', lineHeight: 1.05 }}>{word.english}</div>
-          <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 15, color: 'rgba(255,255,255,0.7)', marginTop: 4 }}>
+          <div lang="ta" style={{ fontFamily: 'var(--font-tamil-learn)', fontSize: 15, color: 'rgba(255,255,255,0.7)', marginTop: 4 }}>
             {word.tamil}
           </div>
           {word.notes && (

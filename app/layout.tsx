@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import '@fontsource/tiro-tamil/400.css'
 import '@fontsource/noto-sans-tamil/400.css'
+import '@fontsource/noto-sans-tamil/500.css'
 import '@fontsource/noto-sans-tamil/600.css'
 import '@fontsource/bebas-neue/400.css'
 import '@fontsource/lora/400.css'

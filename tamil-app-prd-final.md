@@ -52,6 +52,11 @@
   - Stats shows them all, with locked badges greyed.
 - Drum sounds only start after the first tap on a page (browser rule).
 
+### Readability (7 October)
+- **Two Tamil fonts.** Teaching screens (lesson letters and words, quiz prompts and answers, word, letter and phrase cards, breakdown chips) use `--font-tamil-learn` = Noto Sans Tamil, medium weight, because its heavier strokes make look-alike letters easy to tell apart. Headings, the cinema line and decorative text stay on Tiro Tamil (`--font-tamil`). AJ chose this from a side-by-side comparison.
+- **Contrast.** All small text passes 4.5:1. `--stone` is darkened to #6F5F52, the Read gold text to #8F5A00, and faded white text on navy is at least 60%.
+- **Tap targets.** `.hit-44` gives small controls (play buttons, Back, Close) a 44px tap area without changing their look.
+
 ### New localStorage keys
 `tamil-name`, `tamil-lessons-complete`, `tamil-last-track`, `tamil-badges-seen`, `tamil-challenge-best`. Reset clears them all.
 

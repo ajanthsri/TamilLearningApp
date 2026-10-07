@@ -87,7 +87,7 @@ export function QuizQuestion({ question, onAnswer, disabled, selected, showNotSu
               “{question.prompt}”
             </div>
           ) : (
-            <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: question.type === 'letter' ? 64 : 40, color: 'var(--turmeric)', lineHeight: 1.2 }}>
+            <div lang="ta" style={{ fontFamily: 'var(--font-tamil-learn)', fontSize: question.type === 'letter' ? 64 : 40, color: 'var(--turmeric)', lineHeight: 1.2 }}>
               {question.prompt}
             </div>
           )}
@@ -113,7 +113,7 @@ export function QuizQuestion({ question, onAnswer, disabled, selected, showNotSu
               borderRadius: 'var(--radius)',
               padding: isShape ? 0 : '14px 10px',
               minHeight: isShape ? 72 : 56,
-              fontFamily: isShape ? 'var(--font-tamil)' : 'var(--font-body)',
+              fontFamily: isShape ? 'var(--font-tamil-learn)' : 'var(--font-body)',
               fontSize: isShape ? 34 : question.type === 'letter' ? 22 : 15,
               fontStyle: question.type === 'letter' ? 'italic' : 'normal',
               lineHeight: 1.25,

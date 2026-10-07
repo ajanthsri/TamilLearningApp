@@ -20,6 +20,8 @@
   --error-soft: #E8A090;
 
   --font-tamil: 'Tiro Tamil', 'Latha', 'Tamil MN', 'Noto Sans Tamil', serif;
+  /* Teaching screens (letters, words, quiz answers): plainer, heavier strokes so look-alike letters are easy to tell apart */
+  --font-tamil-learn: 'Noto Sans Tamil', 'Latha', 'Tamil MN', sans-serif;
   --font-display: 'Bebas Neue', 'Impact', sans-serif;
   --font-body: 'Lora', 'Georgia', serif;
 
@@ -44,6 +46,11 @@ body {
 .tamil {
   font-family: var(--font-tamil);
   line-height: 1.3;
+}
+
+/* Teaching font reads best at medium weight */
+[style*="--font-tamil-learn"] {
+  font-weight: 500;
 }
 
 /* ── Grain Texture ─────────────────────────────────────────── */

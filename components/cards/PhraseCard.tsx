@@ -25,7 +25,7 @@ export function PhraseCard({ phrase, seen, practised, index = 0, onHear, onRevea
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
         <div style={{ minWidth: 0 }}>
-          <div lang="ta" style={{ fontFamily: 'var(--font-tamil)', fontSize: 22, color: 'var(--navy)', lineHeight: 1.45 }}>
+          <div lang="ta" style={{ fontFamily: 'var(--font-tamil-learn)', fontSize: 22, color: 'var(--navy)', lineHeight: 1.45 }}>
             {phrase.tamil}
           </div>
           <div style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 14, color: 'var(--stone)', marginTop: 2 }}>
