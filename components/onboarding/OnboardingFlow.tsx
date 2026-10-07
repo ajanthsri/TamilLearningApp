@@ -257,7 +257,7 @@ export function OnboardingFlow({ onComplete }: Props) {
             </label>
             <div style={{ marginTop: 20 }}>
               <Primary onClick={continueFromAvatar} disabled={!hasAvatar}>
-                Start learning →
+                {hasAvatar ? 'Start learning →' : 'Pick a character first ↑'}
               </Primary>
             </div>
           </>
